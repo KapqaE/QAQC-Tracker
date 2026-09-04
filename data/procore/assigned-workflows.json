@@ -1,0 +1,44 @@
+[
+  {
+    "code": "5 Construction: Architecture",
+    "label": "5 Construction: Architecture",
+    "raw": "5 Construction: Architecture",
+    "count": 2
+  },
+  {
+    "code": "5 Construction: Civil",
+    "label": "5 Construction: Civil",
+    "raw": "5 Construction: Civil",
+    "count": 3
+  },
+  {
+    "code": "5 Construction: Electrical",
+    "label": "5 Construction: Electrical",
+    "raw": "5 Construction: Electrical",
+    "count": 2
+  },
+  {
+    "code": "5 Construction: General / Non-Disciplinary",
+    "label": "5 Construction: General / Non-Disciplinary",
+    "raw": "5 Construction: General / Non-Disciplinary",
+    "count": 9
+  },
+  {
+    "code": "5 Construction: Health & Safety",
+    "label": "5 Construction: Health & Safety",
+    "raw": "5 Construction: Health & Safety",
+    "count": 3
+  },
+  {
+    "code": "5 Construction: Structural",
+    "label": "5 Construction: Structural",
+    "raw": "5 Construction: Structural",
+    "count": 11
+  },
+  {
+    "code": "None",
+    "label": "None",
+    "raw": "None",
+    "count": 7
+  }
+]

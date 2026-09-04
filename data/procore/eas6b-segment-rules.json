@@ -1,0 +1,159 @@
+{
+  "source": "EAS-6-B_File and Drawing Naming Convention_v2025-03 1 (1).xlsx",
+  "sourceSheet": "File & DWG Naming Convention",
+  "separator": "-",
+  "coreSegmentCount": 8,
+  "fullElectronicFilenameSegmentCount": 12,
+  "printedDrawingPattern": "[Discipline][Sheet type][Sheet sub-type][Optional digits]-[Floor level][Plan area]",
+  "coreSegments": [
+    {
+      "position": 1,
+      "key": "project",
+      "name": "Project / IBX",
+      "sourceFields": ["Project Code / IBX Name"],
+      "mandatory": true,
+      "optionalFields": [],
+      "appliesTo": ["All electronic files"]
+    },
+    {
+      "position": 2,
+      "key": "file_type",
+      "name": "File type",
+      "sourceFields": ["File type"],
+      "mandatory": true,
+      "optionalFields": [],
+      "appliesTo": ["All electronic files"]
+    },
+    {
+      "position": 3,
+      "key": "discipline",
+      "name": "Discipline",
+      "sourceFields": ["Discipline Designator"],
+      "mandatory": true,
+      "optionalFields": [],
+      "appliesTo": ["All electronic files"]
+    },
+    {
+      "position": 4,
+      "key": "number",
+      "name": "Number / sheet-related segment",
+      "sourceFields": ["Sheet Type Designator / Classification", "Sheet Sub-Type Designator", "Optional Digits"],
+      "mandatory": true,
+      "optionalFields": ["Optional Digits for drawings"],
+      "appliesTo": ["All electronic files"],
+      "composition": "The source fields are concatenated inside one segment; no hyphen is inserted between them. Drawings use one sheet-type digit plus two sheet-sub-type digits and optional trailing digits. Specifications use the CSI/MasterFormat components; the example is 26 + 50 + 00 = 265000."
+    },
+    {
+      "position": 5,
+      "key": "level_area",
+      "name": "Floor level + plan area",
+      "sourceFields": ["Floor Level", "Plan Area"],
+      "mandatory": true,
+      "optionalFields": ["Plan Area"],
+      "appliesTo": ["All electronic files"],
+      "composition": "Floor Level is mandatory and Plan Area is appended in the same segment when applicable: 00 + C = 00C. XX represents a non-applicable floor level."
+    },
+    {
+      "position": 6,
+      "key": "volume",
+      "name": "Volume / space",
+      "sourceFields": ["Volume / Space"],
+      "mandatory": true,
+      "optionalFields": [],
+      "appliesTo": ["All electronic files"]
+    },
+    {
+      "position": 7,
+      "key": "classification",
+      "name": "Classification / package",
+      "sourceFields": ["Classification / Package"],
+      "mandatory": true,
+      "optionalFields": [],
+      "appliesTo": ["All electronic files"]
+    },
+    {
+      "position": 8,
+      "key": "originator",
+      "name": "Originator",
+      "sourceFields": ["Originator"],
+      "mandatory": true,
+      "optionalFields": [],
+      "appliesTo": ["All electronic files"]
+    }
+  ],
+  "electronicFilenameSuffixSegments": [
+    {
+      "position": 9,
+      "key": "title",
+      "name": "Title",
+      "sourceFields": ["Title (Author Defined)"],
+      "mandatory": true,
+      "optionalFields": [],
+      "appliesTo": ["Full electronic filename"]
+    },
+    {
+      "position": 10,
+      "key": "project_phase",
+      "name": "Project phase",
+      "sourceFields": ["Project phase"],
+      "mandatory": true,
+      "optionalFields": [],
+      "appliesTo": ["Full electronic filename"]
+    },
+    {
+      "position": 11,
+      "key": "issue_stage",
+      "name": "Milestone / purpose of issue / stage",
+      "sourceFields": ["Mile Stone or Purpose of Issue/Stage"],
+      "mandatory": true,
+      "optionalFields": [],
+      "appliesTo": ["Full electronic filename"]
+    },
+    {
+      "position": 12,
+      "key": "revision",
+      "name": "Revision",
+      "sourceFields": ["Revision"],
+      "mandatory": true,
+      "optionalFields": [],
+      "appliesTo": ["Full electronic filename"]
+    }
+  ],
+  "documentTypeRules": [
+    {
+      "pattern": "Drawing",
+      "typeCodes": ["DR"],
+      "segment4Rule": "[Sheet type: 1 digit][Sheet sub-type: 2 digits][Optional trailing digits]",
+      "segment5Rule": "[Floor level: 2 characters][Optional plan-area letter]",
+      "authority": "Official EAS-6-B"
+    },
+    {
+      "pattern": "Specification / CSI-based technical content",
+      "typeCodes": ["SP", "TS"],
+      "segment4Rule": "CSI/MasterFormat components combined in one segment; the workbook example is 26 + 50 + 00 = 265000.",
+      "segment5Rule": "Use XX when floor level is not applicable; Plan Area is not used in the specification example.",
+      "authority": "Official EAS-6-B; the TS file-type note explicitly requires CSI MasterFormat"
+    },
+    {
+      "pattern": "Inspection / WIR project extension",
+      "typeCodes": ["IP"],
+      "segment4Rule": "EAS-6-B defines IP as Inspection Test Plan but does not define WIR/MIR/NCR numbering. The Procore project uses WIR.####, MIR.####, and NCR.#### as one segment.",
+      "segment5Rule": "The Procore export uses XX.",
+      "authority": "File type is official; numbering is observed Procore project practice"
+    },
+    {
+      "pattern": "Management plan and other documents",
+      "typeCodes": ["BE", "CA", "CF", "MS", "PL", "PP", "PT", "RG", "RP", "SH"],
+      "segment4Rule": "The workbook defines the file types but does not prescribe a dedicated numbering grammar. Preserve the observed project sequence or prefix as one segment.",
+      "segment5Rule": "Use the official Floor Level + optional Plan Area grammar where possible.",
+      "authority": "Official file types plus observed Procore project numbering"
+    },
+    {
+      "pattern": "Deprecated official file types retained as legacy data",
+      "typeCodes": ["PR", "SC"],
+      "segment4Rule": "Preserve imported values. EAS-6-B marks PR for deletion and directs SC users to DR.",
+      "segment5Rule": "Preserve imported values and flag non-conforming locations.",
+      "authority": "Official EAS-6-B deprecation notes plus existing Procore data"
+    }
+  ]
+}

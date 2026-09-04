@@ -1,0 +1,235 @@
+[
+  {
+    "typeCode": "BE",
+    "kind": "prefixed",
+    "prefix": "BE",
+    "width": 6,
+    "count": 1,
+    "examples": [
+      "BE.000001"
+    ]
+  },
+  {
+    "typeCode": "CA",
+    "kind": "numeric",
+    "prefix": null,
+    "width": 3,
+    "count": 1,
+    "examples": [
+      "020"
+    ]
+  },
+  {
+    "typeCode": "CF",
+    "kind": "numeric",
+    "prefix": null,
+    "width": 3,
+    "count": 1,
+    "examples": [
+      "001"
+    ]
+  },
+  {
+    "typeCode": "DR",
+    "kind": "numeric",
+    "prefix": null,
+    "width": 3,
+    "count": 57,
+    "examples": [
+      "108",
+      "112",
+      "701",
+      "702",
+      "020"
+    ]
+  },
+  {
+    "typeCode": "IP",
+    "kind": "prefixed",
+    "prefix": "MIR",
+    "width": 4,
+    "count": 1,
+    "examples": [
+      "MIR.0001"
+    ]
+  },
+  {
+    "typeCode": "IP",
+    "kind": "prefixed",
+    "prefix": "NCR",
+    "width": 4,
+    "count": 1,
+    "examples": [
+      "NCR.0001"
+    ]
+  },
+  {
+    "typeCode": "IP",
+    "kind": "prefixed",
+    "prefix": "WIR",
+    "width": 4,
+    "count": 11,
+    "examples": [
+      "WIR.0003",
+      "WIR.0004",
+      "WIR.0005",
+      "WIR.0006",
+      "WIR.0007"
+    ]
+  },
+  {
+    "typeCode": "MS",
+    "kind": "numeric",
+    "prefix": null,
+    "width": 3,
+    "count": 20,
+    "examples": [
+      "001",
+      "002",
+      "003",
+      "005",
+      "006"
+    ]
+  },
+  {
+    "typeCode": "PL",
+    "kind": "numeric",
+    "prefix": null,
+    "width": 3,
+    "count": 21,
+    "examples": [
+      "000",
+      "001",
+      "002",
+      "003",
+      "004"
+    ]
+  },
+  {
+    "typeCode": "PP",
+    "kind": "numeric",
+    "prefix": null,
+    "width": 3,
+    "count": 13,
+    "examples": [
+      "001",
+      "002",
+      "003",
+      "004",
+      "005"
+    ]
+  },
+  {
+    "typeCode": "PR",
+    "kind": "numeric",
+    "prefix": null,
+    "width": 3,
+    "count": 1,
+    "examples": [
+      "000"
+    ]
+  },
+  {
+    "typeCode": "PT",
+    "kind": "numeric",
+    "prefix": null,
+    "width": 3,
+    "count": 2,
+    "examples": [
+      "001"
+    ]
+  },
+  {
+    "typeCode": "RG",
+    "kind": "numeric",
+    "prefix": null,
+    "width": 3,
+    "count": 5,
+    "examples": [
+      "001",
+      "002",
+      "010",
+      "011"
+    ]
+  },
+  {
+    "typeCode": "RP",
+    "kind": "numeric",
+    "prefix": null,
+    "width": 3,
+    "count": 20,
+    "examples": [
+      "001",
+      "020",
+      "021",
+      "022",
+      "023"
+    ]
+  },
+  {
+    "typeCode": "RP",
+    "kind": "numeric",
+    "prefix": null,
+    "width": 6,
+    "count": 5,
+    "examples": [
+      "002006",
+      "002007",
+      "002008",
+      "002009",
+      "003001"
+    ]
+  },
+  {
+    "typeCode": "RP",
+    "kind": "prefixed",
+    "prefix": "WIR",
+    "width": 6,
+    "count": 2,
+    "examples": [
+      "WIR.000001",
+      "WIR.000002"
+    ]
+  },
+  {
+    "typeCode": "SC",
+    "kind": "numeric",
+    "prefix": null,
+    "width": 3,
+    "count": 4,
+    "examples": [
+      "637",
+      "660",
+      "661",
+      "662"
+    ]
+  },
+  {
+    "typeCode": "SH",
+    "kind": "numeric",
+    "prefix": null,
+    "width": 3,
+    "count": 10,
+    "examples": [
+      "001",
+      "002",
+      "003",
+      "004",
+      "005"
+    ]
+  },
+  {
+    "typeCode": "TS",
+    "kind": "numeric",
+    "prefix": null,
+    "width": 3,
+    "count": 29,
+    "examples": [
+      "001",
+      "002",
+      "003",
+      "004",
+      "005"
+    ]
+  }
+]

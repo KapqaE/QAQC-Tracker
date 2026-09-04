@@ -1,0 +1,80 @@
+{
+  "sourceRows": 205,
+  "structuredRows": 204,
+  "unstructuredRows": 1,
+  "coreOnlyRows": 199,
+  "rowsWithSuffix": 5,
+  "officialLocationGrammarRows": 159,
+  "nonConformingLocationRows": 45,
+  "officialClassificationRows": 198,
+  "legacyClassificationRows": 6,
+  "drawingRows": 57,
+  "drawingRowsMatchingListedSheetFamilies": 47,
+  "drawingRowsOutsideListedSheetFamilies": 10,
+  "patterns": [
+    {
+      "pattern": "Drawing sheet number",
+      "count": 57,
+      "typeCodes": ["DR"],
+      "numberShape": "3 numeric digits",
+      "example": "IL051-DR-A-120-00C-ZZ-PLAN-ARP",
+      "comparison": "The three digits split into Sheet Type + two-digit Sheet Sub-Type. Forty-seven rows match a listed discipline-specific EAS sheet family; C020, C021 and eight Structural 13x/180 rows fall outside the listed families."
+    },
+    {
+      "pattern": "Inspection project prefix",
+      "count": 13,
+      "typeCodes": ["IP"],
+      "numberShape": "WIR.|MIR.|NCR. + 4 digits",
+      "example": "IL051-IP-S-WIR.0008-XX-XX-XXXX-SRB",
+      "comparison": "IP is an official file type. WIR/MIR/NCR numbering is not defined by EAS-6-B and is retained as a project-specific Segment 4 extension."
+    },
+    {
+      "pattern": "Technical submittal project sequence",
+      "count": 29,
+      "typeCodes": ["TS"],
+      "numberShape": "3 numeric digits",
+      "example": "IL051-TS-E-001-XXX-XX-XXXX-SRB",
+      "comparison": "The EAS-6-B TS note requires CSI MasterFormat, while these records use a three-digit project sequence. They remain importable but are identified as legacy/project practice."
+    },
+    {
+      "pattern": "General project sequence",
+      "count": 92,
+      "typeCodes": ["CA", "CF", "MS", "PL", "PP", "PT", "RG", "RP", "SH"],
+      "numberShape": "3 numeric digits",
+      "example": "IL051-PL-H-013-XX-XX-XXXX-SRB",
+      "comparison": "The file types are official, but EAS-6-B does not define a type-specific numbering grammar for them. The observed three-digit project sequence is preserved."
+    },
+    {
+      "pattern": "Deprecated file-type project sequence",
+      "count": 5,
+      "typeCodes": ["PR", "SC"],
+      "numberShape": "3 numeric digits",
+      "example": "IL051-SC-E-637-XXZ-ZZ-ERTH-SRB",
+      "comparison": "The data is structurally importable, but EAS-6-B marks PR for deletion and SC for replacement by DR."
+    },
+    {
+      "pattern": "Report compound numeric sequence",
+      "count": 5,
+      "typeCodes": ["RP"],
+      "numberShape": "6 numeric digits",
+      "example": "IL051-RP-G-003001-XX-XX-XXXX-SRB",
+      "comparison": "A project-defined report sequence; no dedicated RP number grammar is specified in EAS-6-B."
+    },
+    {
+      "pattern": "Report WIR project prefix",
+      "count": 2,
+      "typeCodes": ["RP"],
+      "numberShape": "WIR. + 6 digits",
+      "example": "IL051-RP-G-WIR.000001-XX-ZZ-XXXX-SRB",
+      "comparison": "A legacy project-defined report pattern, distinct from the four-digit IP/WIR sequence."
+    },
+    {
+      "pattern": "Benchmark project prefix",
+      "count": 1,
+      "typeCodes": ["BE"],
+      "numberShape": "BE. + 6 digits",
+      "example": "IL051-BE-G-BE.000001-XX-ZZ-XXXX-SRB",
+      "comparison": "BE is an official file type; its prefixed sequence is project-defined rather than prescribed by EAS-6-B."
+    }
+  ]
+}

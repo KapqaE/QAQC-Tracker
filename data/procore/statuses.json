@@ -1,0 +1,32 @@
+[
+  {
+    "code": "---",
+    "label": "In Review",
+    "raw": "--- - In Review",
+    "count": 30
+  },
+  {
+    "code": "A",
+    "label": "Proceed",
+    "raw": "A - Proceed",
+    "count": 68
+  },
+  {
+    "code": "B",
+    "label": "Proceed, Comments",
+    "raw": "B - Proceed, Comments",
+    "count": 67
+  },
+  {
+    "code": "C",
+    "label": "Rejected",
+    "raw": "C - Rejected",
+    "count": 31
+  },
+  {
+    "code": "N/A",
+    "label": "Not Applicable",
+    "raw": "N/A - Not Applicable",
+    "count": 9
+  }
+]

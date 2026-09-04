@@ -1,0 +1,500 @@
+[
+  {
+    "code": "AUXL",
+    "label": "Auxiliary systems",
+    "raw": "AUXL - Auxiliary systems",
+    "notes": null
+  },
+  {
+    "code": "BEAM",
+    "label": "Beams",
+    "raw": "BEAM - Beams",
+    "notes": null
+  },
+  {
+    "code": "BGMS",
+    "label": "Building Management System",
+    "raw": "BGMS - Building Management System",
+    "notes": "DCOS"
+  },
+  {
+    "code": "CAGE",
+    "label": "Cage / Cabs",
+    "raw": "CAGE - Cage / Cabs",
+    "notes": null
+  },
+  {
+    "code": "CLNG",
+    "label": "Ceiling",
+    "raw": "CLNG - Ceiling",
+    "notes": null
+  },
+  {
+    "code": "COLS",
+    "label": "Columns",
+    "raw": "COLS - Columns",
+    "notes": null
+  },
+  {
+    "code": "COMM",
+    "label": "Comms / IT / fiber / ducts",
+    "raw": "COMM - Comms / IT / fiber / ducts",
+    "notes": null
+  },
+  {
+    "code": "CONT",
+    "label": "Controls & Instrumentation",
+    "raw": "CONT - Controls & Instrumentation",
+    "notes": null
+  },
+  {
+    "code": "CWTR",
+    "label": "Chilled water systems",
+    "raw": "CWTR - Chilled water systems",
+    "notes": null
+  },
+  {
+    "code": "DETL",
+    "label": "Details",
+    "raw": "DETL - Details",
+    "notes": null
+  },
+  {
+    "code": "DOMW",
+    "label": "Domestic water systems",
+    "raw": "DOMW - Domestic water systems",
+    "notes": null
+  },
+  {
+    "code": "DOOR",
+    "label": "Doors",
+    "raw": "DOOR - Doors",
+    "notes": null
+  },
+  {
+    "code": "ENER",
+    "label": "Energy Management Systems",
+    "raw": "ENER - Energy Management Systems",
+    "notes": null
+  },
+  {
+    "code": "ERTH",
+    "label": "Earthing / Grounding / Bonding systems",
+    "raw": "ERTH - Earthing / Grounding / Bonding systems",
+    "notes": null
+  },
+  {
+    "code": "EXHS",
+    "label": "Exhaust",
+    "raw": "EXHS - Exhaust",
+    "notes": null
+  },
+  {
+    "code": "FFEQ",
+    "label": "Furniture, Fixtures & Equipment",
+    "raw": "FFEQ - Furniture, Fixtures & Equipment",
+    "notes": null
+  },
+  {
+    "code": "FIRE",
+    "label": "Fire detection / Alarm system",
+    "raw": "FIRE - Fire detection / Alarm system",
+    "notes": null
+  },
+  {
+    "code": "FLOR",
+    "label": "Floor system",
+    "raw": "FLOR - Floor system",
+    "notes": "Floor system, raised access floor"
+  },
+  {
+    "code": "FNDN",
+    "label": "Foundation",
+    "raw": "FNDN - Foundation",
+    "notes": null
+  },
+  {
+    "code": "FUEL",
+    "label": "Fuel System",
+    "raw": "FUEL - Fuel System",
+    "notes": null
+  },
+  {
+    "code": "GLAZ",
+    "label": "Glazing / curtain walling",
+    "raw": "GLAZ - Glazing / curtain walling",
+    "notes": null
+  },
+  {
+    "code": "HOTW",
+    "label": "Hot water heating system",
+    "raw": "HOTW - Hot water heating system",
+    "notes": null
+  },
+  {
+    "code": "HVAC",
+    "label": "HVAC systems",
+    "raw": "HVAC - HVAC systems",
+    "notes": null
+  },
+  {
+    "code": "IMGT",
+    "label": "Information Management",
+    "raw": "IMGT - Information Management",
+    "notes": null
+  },
+  {
+    "code": "LITE",
+    "label": "Lighting (& Small Power)",
+    "raw": "LITE - Lighting (& Small Power)",
+    "notes": null
+  },
+  {
+    "code": "LTNG",
+    "label": "Lightning protection system",
+    "raw": "LTNG - Lightning protection system",
+    "notes": null
+  },
+  {
+    "code": "MEPH",
+    "label": "Combined Services",
+    "raw": "MEPH - Combined Services",
+    "notes": null
+  },
+  {
+    "code": "PLAN",
+    "label": "Floor Plan",
+    "raw": "PLAN - Floor Plan",
+    "notes": "General layouts, dimensions and key notes"
+  },
+  {
+    "code": "PLNT",
+    "label": "Plants and Landscaping",
+    "raw": "PLNT - Plants and Landscaping",
+    "notes": null
+  },
+  {
+    "code": "POWR",
+    "label": "Power System (HV & LV)",
+    "raw": "POWR - Power System (HV & LV)",
+    "notes": null
+  },
+  {
+    "code": "PRKG",
+    "label": "Parking",
+    "raw": "PRKG - Parking",
+    "notes": null
+  },
+  {
+    "code": "PVMT",
+    "label": "Pavement / Hardscape",
+    "raw": "PVMT - Pavement / Hardscape",
+    "notes": null
+  },
+  {
+    "code": "PWTR",
+    "label": "Process water system",
+    "raw": "PWTR - Process water system",
+    "notes": null
+  },
+  {
+    "code": "ROOF",
+    "label": "Roof system",
+    "raw": "ROOF - Roof system",
+    "notes": null
+  },
+  {
+    "code": "SANR",
+    "label": "Sanitary / Sewer / Foul drainage systems",
+    "raw": "SANR - Sanitary / Sewer / Foul drainage systems",
+    "notes": null
+  },
+  {
+    "code": "SCHL",
+    "label": "Schedule for lighting, doors, equipment, etc.",
+    "raw": "SCHL - Schedule for lighting, doors, equipment, etc.",
+    "notes": "This is not intended for project timelines"
+  },
+  {
+    "code": "SERT",
+    "label": "Security",
+    "raw": "SERT - Security",
+    "notes": null
+  },
+  {
+    "code": "SITE",
+    "label": "Site Plan",
+    "raw": "SITE - Site Plan",
+    "notes": "Site Information (inc. Master planning, Land & Ground Conditions)"
+  },
+  {
+    "code": "SLAB",
+    "label": "Slab",
+    "raw": "SLAB - Slab",
+    "notes": null
+  },
+  {
+    "code": "SMOK",
+    "label": "Smoke Extract System",
+    "raw": "SMOK - Smoke Extract System",
+    "notes": null
+  },
+  {
+    "code": "SPRN",
+    "label": "Sprinkler system / Fire suppression system",
+    "raw": "SPRN - Sprinkler system / Fire suppression system",
+    "notes": null
+  },
+  {
+    "code": "STRM",
+    "label": "Storm / Rain drainage systems",
+    "raw": "STRM - Storm / Rain drainage systems",
+    "notes": null
+  },
+  {
+    "code": "STRS",
+    "label": "Stairs / Lifts",
+    "raw": "STRS - Stairs / Lifts",
+    "notes": null
+  },
+  {
+    "code": "TOPO",
+    "label": "Topographical",
+    "raw": "TOPO - Topographical",
+    "notes": null
+  },
+  {
+    "code": "TRAY",
+    "label": "Cable tray / Containment",
+    "raw": "TRAY - Cable tray / Containment",
+    "notes": null
+  },
+  {
+    "code": "UTIL",
+    "label": "Utilities / Incoming Services",
+    "raw": "UTIL - Utilities / Incoming Services",
+    "notes": null
+  },
+  {
+    "code": "WALL",
+    "label": "Walls (including Cladding)",
+    "raw": "WALL - Walls (including Cladding)",
+    "notes": null
+  },
+  {
+    "code": "XXXX",
+    "label": "Not Applicable",
+    "raw": "XXXX - Not Applicable",
+    "notes": "Ask for permission to use"
+  },
+  {
+    "code": "ZZZZ",
+    "label": "Multiple Classifications",
+    "raw": "ZZZZ - Multiple Classifications",
+    "notes": "Ask for permission to use"
+  },
+  {
+    "code": "ACC",
+    "label": "Air Cooled Chiller",
+    "raw": "ACC - Air Cooled Chiller",
+    "notes": "ACC"
+  },
+  {
+    "code": "AHU",
+    "label": "Air Handling Unit",
+    "raw": "AHU - Air Handling Unit",
+    "notes": "AHU"
+  },
+  {
+    "code": "ATS",
+    "label": "Automatic Transfer Switch",
+    "raw": "ATS - Automatic Transfer Switch",
+    "notes": "Formerly known as ASTS"
+  },
+  {
+    "code": "BATT",
+    "label": "Battery System",
+    "raw": "BATT - Battery System",
+    "notes": "BATT"
+  },
+  {
+    "code": "BUS",
+    "label": "Busway",
+    "raw": "BUS - Busway",
+    "notes": "BUS"
+  },
+  {
+    "code": "CDU",
+    "label": "Cooling Distribution Unit",
+    "raw": "CDU - Cooling Distribution Unit",
+    "notes": "CDU"
+  },
+  {
+    "code": "CHIL",
+    "label": "Chiller",
+    "raw": "CHIL - Chiller",
+    "notes": "Delete"
+  },
+  {
+    "code": "CRAC",
+    "label": "CRAC (DX)",
+    "raw": "CRAC - CRAC (DX)",
+    "notes": "CRAC"
+  },
+  {
+    "code": "CRAH",
+    "label": "CRAH (Chilled Water)",
+    "raw": "CRAH - CRAH (Chilled Water)",
+    "notes": "CRAH"
+  },
+  {
+    "code": "CRAY",
+    "label": "Cooling Wall",
+    "raw": "CRAY - Cooling Wall",
+    "notes": "CRAY"
+  },
+  {
+    "code": "CT",
+    "label": "Cooling Tower",
+    "raw": "CT - Cooling Tower",
+    "notes": "CT"
+  },
+  {
+    "code": "EMOD",
+    "label": "EMOD",
+    "raw": "EMOD - EMOD",
+    "notes": "Delete"
+  },
+  {
+    "code": "ESKIDS",
+    "label": "Electrical Skids",
+    "raw": "ESKIDS - Electrical Skids",
+    "notes": "ESKIDS"
+  },
+  {
+    "code": "EWAL",
+    "label": "Electrical Wall",
+    "raw": "EWAL - Electrical Wall",
+    "notes": "Delete"
+  },
+  {
+    "code": "GEN",
+    "label": "Generator",
+    "raw": "GEN - Generator",
+    "notes": "GEN"
+  },
+  {
+    "code": "HAC",
+    "label": "Hot Aisle Containment",
+    "raw": "HAC - Hot Aisle Containment",
+    "notes": "HAC"
+  },
+  {
+    "code": "HDAC",
+    "label": "Hybrid Dry Air Cooler",
+    "raw": "HDAC - Hybrid Dry Air Cooler",
+    "notes": "HDAC"
+  },
+  {
+    "code": "HMTX",
+    "label": "Transformer",
+    "raw": "HMTX - Transformer",
+    "notes": "HMTX"
+  },
+  {
+    "code": "LB",
+    "label": "Load Bank",
+    "raw": "LB - Load Bank",
+    "notes": "LB"
+  },
+  {
+    "code": "LVSWGR",
+    "label": "Low Voltage Switch Gear",
+    "raw": "LVSWGR - Low Voltage Switch Gear",
+    "notes": "LVSWGR"
+  },
+  {
+    "code": "MSKIDS",
+    "label": "Mechanical Skids",
+    "raw": "MSKIDS - Mechanical Skids",
+    "notes": "MSKIDS"
+  },
+  {
+    "code": "MVSWGR",
+    "label": "Medium Voltage Switch Gear",
+    "raw": "MVSWGR - Medium Voltage Switch Gear",
+    "notes": "MVSWGR"
+  },
+  {
+    "code": "PCR",
+    "label": "Packaged Chiller Room",
+    "raw": "PCR - Packaged Chiller Room",
+    "notes": "PCR"
+  },
+  {
+    "code": "PDU",
+    "label": "Power Distribution Unit",
+    "raw": "PDU - Power Distribution Unit",
+    "notes": "PDU"
+  },
+  {
+    "code": "PPRA",
+    "label": "Packaged Pump Room (Air Cooled)",
+    "raw": "PPRA - Packaged Pump Room (Air Cooled)",
+    "notes": "Delete"
+  },
+  {
+    "code": "PPR",
+    "label": "Packaged Pump Room (Water Cooled)",
+    "raw": "PPR - Packaged Pump Room (Water Cooled)",
+    "notes": "PPR"
+  },
+  {
+    "code": "RPP",
+    "label": "Remote Power Panel",
+    "raw": "RPP - Remote Power Panel",
+    "notes": "RPP"
+  },
+  {
+    "code": "RTU",
+    "label": "Roof Top Unit",
+    "raw": "RTU - Roof Top Unit",
+    "notes": "RTU"
+  },
+  {
+    "code": "STS",
+    "label": "Static Transfer Switch",
+    "raw": "STS - Static Transfer Switch",
+    "notes": "STS"
+  },
+  {
+    "code": "SUB",
+    "label": "Substations",
+    "raw": "SUB - Substations",
+    "notes": "SUB"
+  },
+  {
+    "code": "SWBH",
+    "label": "Switchboard (HV)",
+    "raw": "SWBH - Switchboard (HV)",
+    "notes": "SWBH"
+  },
+  {
+    "code": "SWBL",
+    "label": "Switchboard (LV)",
+    "raw": "SWBL - Switchboard (LV)",
+    "notes": "SWBL"
+  },
+  {
+    "code": "UPS",
+    "label": "Universal Power Supply",
+    "raw": "UPS - Universal Power Supply",
+    "notes": "UPS"
+  },
+  {
+    "code": "WCC",
+    "label": "Water Cooled Chiller",
+    "raw": "WCC - Water Cooled Chiller",
+    "notes": "WCC"
+  }
+]

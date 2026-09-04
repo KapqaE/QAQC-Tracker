@@ -1,0 +1,380 @@
+[
+  {
+    "code": "AF",
+    "label": "Animation File",
+    "raw": "AF - Animation File",
+    "notes": "Merged with IG visuals, not used"
+  },
+  {
+    "code": "BOD",
+    "label": "Basis of Design",
+    "raw": "BOD - Basis of Design",
+    "notes": null
+  },
+  {
+    "code": "BC",
+    "label": "Business Case / Strategic Brief",
+    "raw": "BC - Business Case / Strategic Brief",
+    "notes": "Business case, strategic brief, procurement strategy"
+  },
+  {
+    "code": "BE",
+    "label": "Benchmark & Mock-ups",
+    "raw": "BE - Benchmark & Mock-ups",
+    "notes": "This is intended for mock-ups of design solutions.  Not for samples of materials, which would be part of a TS (Technical Submittal)."
+  },
+  {
+    "code": "BQ",
+    "label": "Bill of Quantities / Cost Estimate",
+    "raw": "BQ - Bill of Quantities / Cost Estimate",
+    "notes": null
+  },
+  {
+    "code": "CA",
+    "label": "Calculations",
+    "raw": "CA - Calculations",
+    "notes": null
+  },
+  {
+    "code": "CF",
+    "label": "Certificate",
+    "raw": "CF - Certificate",
+    "notes": null
+  },
+  {
+    "code": "CL",
+    "label": "Claims & Disputes",
+    "raw": "CL - Claims & Disputes",
+    "notes": null
+  },
+  {
+    "code": "CM",
+    "label": "Combined Model",
+    "raw": "CM - Combined Model",
+    "notes": "Combine, work in progress (wip) model"
+  },
+  {
+    "code": "CO",
+    "label": "Correspondence",
+    "raw": "CO - Correspondence",
+    "notes": "These are general correspondences"
+  },
+  {
+    "code": "CP",
+    "label": "Cost Plan",
+    "raw": "CP - Cost Plan",
+    "notes": null
+  },
+  {
+    "code": "CR",
+    "label": "Model export for clash checking",
+    "raw": "CR - Model export for clash checking",
+    "notes": null
+  },
+  {
+    "code": "CT",
+    "label": "Contract / Agreement",
+    "raw": "CT - Contract / Agreement",
+    "notes": "all contracts, which includes PMO land and lease agreements"
+  },
+  {
+    "code": "DB",
+    "label": "Database",
+    "raw": "DB - Database",
+    "notes": "Not used"
+  },
+  {
+    "code": "DAF",
+    "label": "Design Approval Form",
+    "raw": "DAF - Design Approval Form",
+    "notes": null
+  },
+  {
+    "code": "DI",
+    "label": "Document Issue Register",
+    "raw": "DI - Document Issue Register",
+    "notes": "Use register instead"
+  },
+  {
+    "code": "DR",
+    "label": "2D drawing",
+    "raw": "DR - 2D drawing",
+    "notes": "Any image, schedule, single line diagram, specification, or survey that is included in a drawing set shall be considered a drawing and use the file type \"DR\".  The file format is a .pdf."
+  },
+  {
+    "code": "FB",
+    "label": "Fabrication drawings/documents",
+    "raw": "FB - Fabrication drawings/documents",
+    "notes": "Delete - this is a duplication of TS, please use technical submittal."
+  },
+  {
+    "code": "FN",
+    "label": "File note",
+    "raw": "FN - File note",
+    "notes": null
+  },
+  {
+    "code": "GD",
+    "label": "Guidance and Training",
+    "raw": "GD - Guidance and Training",
+    "notes": null
+  },
+  {
+    "code": "IE",
+    "label": "Information exchange file (Binder)",
+    "raw": "IE - Information exchange file (Binder)",
+    "notes": "Delete - intended to be BlueBeam drawing binder, thus name change to PB (Package Binder)."
+  },
+  {
+    "code": "IG",
+    "label": "Image",
+    "raw": "IG - Image",
+    "notes": "Pictures and renderings"
+  },
+  {
+    "code": "IM",
+    "label": "Information Management",
+    "raw": "IM - Information Management",
+    "notes": null
+  },
+  {
+    "code": "IN",
+    "label": "Instruction (Engineer/PM)",
+    "raw": "IN - Instruction (Engineer/PM)",
+    "notes": null
+  },
+  {
+    "code": "IP",
+    "label": "Inspection Test Plan",
+    "raw": "IP - Inspection Test Plan",
+    "notes": null
+  },
+  {
+    "code": "IS",
+    "label": "Insurance (including bonds, Warranties)",
+    "raw": "IS - Insurance (including bonds, Warranties)",
+    "notes": "Insurance, bonds, and warranties"
+  },
+  {
+    "code": "M2",
+    "label": "Model - 2D",
+    "raw": "M2 - Model - 2D",
+    "notes": "This is typically the AutoCAD (.dwg) format of the drawings"
+  },
+  {
+    "code": "M3",
+    "label": "Model - 3D authoring version (e.g. Revit)",
+    "raw": "M3 - Model - 3D authoring version (e.g. Revit)",
+    "notes": "Revit"
+  },
+  {
+    "code": "ME",
+    "label": "Model Exchange (e.g. IFC)",
+    "raw": "ME - Model Exchange (e.g. IFC)",
+    "notes": "Navisworks"
+  },
+  {
+    "code": "MI",
+    "label": "Minutes for meetings / Action Notes",
+    "raw": "MI - Minutes for meetings / Action Notes",
+    "notes": null
+  },
+  {
+    "code": "MR",
+    "label": "Model export (e.g. Navisworks)",
+    "raw": "MR - Model export (e.g. Navisworks)",
+    "notes": null
+  },
+  {
+    "code": "MS",
+    "label": "Risk Assessment and / or Method statement (RAMS)",
+    "raw": "MS - Risk Assessment and / or Method statement (RAMS)",
+    "notes": null
+  },
+  {
+    "code": "OM",
+    "label": "Operation and Maintenance Manual",
+    "raw": "OM - Operation and Maintenance Manual",
+    "notes": null
+  },
+  {
+    "code": "PB",
+    "label": "Package Binder",
+    "raw": "PB - Package Binder",
+    "notes": "Multiple drawings in a single package, typically used when compiling a set of drawings for a specific discipline; particularly for reviews."
+  },
+  {
+    "code": "PC",
+    "label": "Payment",
+    "raw": "PC - Payment",
+    "notes": null
+  },
+  {
+    "code": "PCF",
+    "label": "Project Change Form",
+    "raw": "PCF - Project Change Form",
+    "notes": "To be used for standard deviation requests and change requests for both design and construction stages"
+  },
+  {
+    "code": "PE",
+    "label": "Permit",
+    "raw": "PE - Permit",
+    "notes": "Permits and AHJ Approvals"
+  },
+  {
+    "code": "PL",
+    "label": "Management plan",
+    "raw": "PL - Management plan",
+    "notes": null
+  },
+  {
+    "code": "PO",
+    "label": "Purchase Order",
+    "raw": "PO - Purchase Order",
+    "notes": null
+  },
+  {
+    "code": "PP",
+    "label": "Presentation",
+    "raw": "PP - Presentation",
+    "notes": null
+  },
+  {
+    "code": "PR",
+    "label": "Program",
+    "raw": "PR - Program",
+    "notes": "Delete - to eliminate confusion with space plan areas and equipment types and quantities and ensure use of RD (Register)"
+  },
+  {
+    "code": "PT",
+    "label": "Protocols and Policies",
+    "raw": "PT - Protocols and Policies",
+    "notes": null
+  },
+  {
+    "code": "QT",
+    "label": "Quotation",
+    "raw": "QT - Quotation",
+    "notes": null
+  },
+  {
+    "code": "RD",
+    "label": "Room data sheet",
+    "raw": "RD - Room data sheet",
+    "notes": "Room data sheets are also know as Equinix Architectural Standard - 1 (EAS-1).  Use \"ST\""
+  },
+  {
+    "code": "RG",
+    "label": "Register / List",
+    "raw": "RG - Register / List",
+    "notes": "This should not be used for any register or list that is part of a drawing or drawing set; all registers, lists, and schedules part of a drawing are classified as DR (Drawing)"
+  },
+  {
+    "code": "RP",
+    "label": "Report",
+    "raw": "RP - Report",
+    "notes": null
+  },
+  {
+    "code": "RR",
+    "label": "Risk Register",
+    "raw": "RR - Risk Register",
+    "notes": null
+  },
+  {
+    "code": "RFI",
+    "label": "Request for Information",
+    "raw": "RFI - Request for Information",
+    "notes": null
+  },
+  {
+    "code": "RFP",
+    "label": "Request for Proposal / Quotation / ITT",
+    "raw": "RFP - Request for Proposal / Quotation / ITT",
+    "notes": "Include requests for quotations / ITT"
+  },
+  {
+    "code": "SA",
+    "label": "Schedule of accommodation",
+    "raw": "SA - Schedule of accommodation",
+    "notes": "Delete"
+  },
+  {
+    "code": "SC",
+    "label": "Schematic",
+    "raw": "SC - Schematic",
+    "notes": "Delete - Use DR (drawing)"
+  },
+  {
+    "code": "SH",
+    "label": "Schedule / Gantt",
+    "raw": "SH - Schedule / Gantt",
+    "notes": "Gantt Chart that outlines key dates and deliverables for construction, procurement, etc. as well as how long it takes to get things done.  Equipment schedules are to be included in DR (drawings) not a separate file type."
+  },
+  {
+    "code": "SK",
+    "label": "Sketch",
+    "raw": "SK - Sketch",
+    "notes": null
+  },
+  {
+    "code": "SN",
+    "label": "Snag / punch / defect",
+    "raw": "SN - Snag / punch / defect",
+    "notes": "This is also known as a punch list or defect list"
+  },
+  {
+    "code": "SP",
+    "label": "Specification",
+    "raw": "SP - Specification",
+    "notes": "Numbering shall follow the major categories format as outlined per Construction Specifications Institute (CSI) MaterFormat"
+  },
+  {
+    "code": "ST",
+    "label": "Standard",
+    "raw": "ST - Standard",
+    "notes": null
+  },
+  {
+    "code": "SU",
+    "label": "Survey",
+    "raw": "SU - Survey",
+    "notes": "Delete - Surveys are drawings or a portion of a report - Please use DR (drawing) or RP (report)"
+  },
+  {
+    "code": "TC",
+    "label": "Testing and Commissioning",
+    "raw": "TC - Testing and Commissioning",
+    "notes": null
+  },
+  {
+    "code": "TI",
+    "label": "Technical Information",
+    "raw": "TI - Technical Information",
+    "notes": "Delete"
+  },
+  {
+    "code": "TM",
+    "label": "Template",
+    "raw": "TM - Template",
+    "notes": "Delete - all templates are to fall under the file type it is associated with.  For example a cost plan template will be under cost plan."
+  },
+  {
+    "code": "TS",
+    "label": "Technical Submittal",
+    "raw": "TS - Technical Submittal",
+    "notes": "Include all shop drawings, fabrication drawings, and validations/verifications of acceptable materials (samples), fixtures, and equipment.  All submittals shall follow CSI MaterFormat."
+  },
+  {
+    "code": "VA",
+    "label": "Validation",
+    "raw": "VA - Validation",
+    "notes": "Delete"
+  },
+  {
+    "code": "VR",
+    "label": "Variation / Change Request",
+    "raw": "VR - Variation / Change Request",
+    "notes": null
+  }
+]

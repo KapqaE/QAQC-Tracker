@@ -1,0 +1,80 @@
+[
+  {
+    "code": "ERTH",
+    "label": "Earthing / Grounding / Bonding Systems",
+    "raw": "ERTH - Earthing / Grounding / Bonding Systems",
+    "count": 12
+  },
+  {
+    "code": "FLOR",
+    "label": "Floor System",
+    "raw": "FLOR - Floor System",
+    "count": 1
+  },
+  {
+    "code": "FNDN",
+    "label": "Foundation",
+    "raw": "FNDN - Foundation",
+    "count": 11
+  },
+  {
+    "code": "IMGT",
+    "label": "Information Management",
+    "raw": "IMGT - Information Management",
+    "count": 1
+  },
+  {
+    "code": "PLAN",
+    "label": "Floor Plan",
+    "raw": "PLAN - Floor Plan",
+    "count": 7
+  },
+  {
+    "code": "PLNT",
+    "label": "Plants and Landscaping",
+    "raw": "PLNT - Plants and Landscaping",
+    "count": 2
+  },
+  {
+    "code": "POWR",
+    "label": "Power System (HV & LV)",
+    "raw": "POWR - Power System (HV & LV)",
+    "count": 4
+  },
+  {
+    "code": "TOPO",
+    "label": "Topographical",
+    "raw": "TOPO - Topographical",
+    "count": 8
+  },
+  {
+    "code": "TRAY",
+    "label": "Cable tray / Containment",
+    "raw": "TRAY - Cable tray / Containment",
+    "count": 1
+  },
+  {
+    "code": "UTIL",
+    "label": "Utilities / Incoming Services",
+    "raw": "UTIL - Utilities / Incoming Services",
+    "count": 2
+  },
+  {
+    "code": "WALL",
+    "label": "Walls (including Cladding)",
+    "raw": "WALL - Walls (including Cladding)",
+    "count": 2
+  },
+  {
+    "code": "XXXX",
+    "label": "Not Applicable",
+    "raw": "XXXX - Not Applicable",
+    "count": 104
+  },
+  {
+    "code": "ZZZZ",
+    "label": "Multiple Classifications",
+    "raw": "ZZZZ - Multiple Classifications",
+    "count": 50
+  }
+]

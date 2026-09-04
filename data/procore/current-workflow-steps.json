@@ -1,0 +1,38 @@
+[
+  {
+    "code": "Architecture Review",
+    "label": "Architecture Review",
+    "raw": "Architecture Review",
+    "count": 2
+  },
+  {
+    "code": "Civil Review",
+    "label": "Civil Review",
+    "raw": "Civil Review",
+    "count": 3
+  },
+  {
+    "code": "Electrical Review",
+    "label": "Electrical Review",
+    "raw": "Electrical Review",
+    "count": 2
+  },
+  {
+    "code": "General Review",
+    "label": "General Review",
+    "raw": "General Review",
+    "count": 9
+  },
+  {
+    "code": "Health & Safety Review",
+    "label": "Health & Safety Review",
+    "raw": "Health & Safety Review",
+    "count": 3
+  },
+  {
+    "code": "Structural Review",
+    "label": "Structural Review",
+    "raw": "Structural Review",
+    "count": 11
+  }
+]

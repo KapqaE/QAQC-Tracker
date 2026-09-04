@@ -1,0 +1,104 @@
+[
+  {
+    "code": "G",
+    "label": "General (non-disciplinary)",
+    "raw": "General (non-disciplinary)",
+    "notes": "Cover Sheet, Drawing Index, project schedule, construction logistics plans, etc."
+  },
+  {
+    "code": "C",
+    "label": "Civil",
+    "raw": "Civil",
+    "notes": "Surveys, Topography, Grading and Drainage, Utilities and Underground Services, Roads, Parking, and Erosion Control."
+  },
+  {
+    "code": "L",
+    "label": "Landscape",
+    "raw": "Landscape",
+    "notes": "Landscaping plans, plants, irrigation"
+  },
+  {
+    "code": "S",
+    "label": "Structural",
+    "raw": "Structural",
+    "notes": "Structural drawings and details"
+  },
+  {
+    "code": "A",
+    "label": "Architectural",
+    "raw": "Architectural",
+    "notes": "Architectural plans, elevations, details, and location of any equipment device, or fixture"
+  },
+  {
+    "code": "M",
+    "label": "Mechanical",
+    "raw": "Mechanical",
+    "notes": "Mechanical plans, equipment schedules, and details"
+  },
+  {
+    "code": "P",
+    "label": "Plumbing / Public Health",
+    "raw": "Plumbing / Public Health",
+    "notes": "Plumbing plans, equipment schedules, details, and single line diagrams.  Include potable water and sanitary sewer."
+  },
+  {
+    "code": "F",
+    "label": "Fire Protection / Suppression",
+    "raw": "Fire Protection / Suppression",
+    "notes": "Fire sprinkler plans, equipment schedules, details, and single line diagrams"
+  },
+  {
+    "code": "E",
+    "label": "Electrical",
+    "raw": "Electrical",
+    "notes": "Electrical and lighting plans, equipment schedules, details, and single line diagrams."
+  },
+  {
+    "code": "FA",
+    "label": "Fire Alarm / Detection",
+    "raw": "Fire Alarm / Detection",
+    "notes": "Fire Alarm plans, equipment schedules, details, and single line diagrams"
+  },
+  {
+    "code": "T",
+    "label": "Telecommunications / IT / Network",
+    "raw": "Telecommunications / IT / Network",
+    "notes": "Telecom plans, elevations, equipment schedules, details, and single line diagrams."
+  },
+  {
+    "code": "SE",
+    "label": "Security",
+    "raw": "Security",
+    "notes": "Security plans, equipment schedules, details, and single line diagrams"
+  },
+  {
+    "code": "IC",
+    "label": "Instrumentation & Controls / DCOS",
+    "raw": "Instrumentation & Controls / DCOS",
+    "notes": "DCOS/DCIM/BMS plans equipment schedules, details, and single line diagrams"
+  },
+  {
+    "code": "N",
+    "label": "Sustainability / Environmental",
+    "raw": "Sustainability / Environmental",
+    "notes": null
+  },
+  {
+    "code": "H",
+    "label": "Health and Safety",
+    "raw": "Health and Safety",
+    "notes": null
+  },
+  {
+    "code": "K",
+    "label": "EQIX Commercial (Internal)",
+    "raw": "EQIX Commercial (Internal)",
+    "notes": null
+  },
+  {
+    "code": "Z",
+    "label": "EQIX Management (Internal)",
+    "raw": "EQIX Management (Internal)",
+    "notes": null
+  }
+]

@@ -1,0 +1,86 @@
+[
+  {
+    "code": "ERTH",
+    "label": "Earthing / Grounding / Bonding Systems",
+    "raw": "ERTH",
+    "count": 12
+  },
+  {
+    "code": "FLOR",
+    "label": "Floor System",
+    "raw": "FLOR",
+    "count": 1
+  },
+  {
+    "code": "FNDN",
+    "label": "Foundation",
+    "raw": "FNDN",
+    "count": 11
+  },
+  {
+    "code": "IMGT",
+    "label": "Information Management",
+    "raw": "IMGT",
+    "count": 1
+  },
+  {
+    "code": "PLAN",
+    "label": "Floor Plan",
+    "raw": "PLAN",
+    "count": 7
+  },
+  {
+    "code": "PLNT",
+    "label": "Plants and Landscaping",
+    "raw": "PLNT",
+    "count": 1
+  },
+  {
+    "code": "POWR",
+    "label": "Power System (HV & LV)",
+    "raw": "POWR",
+    "count": 4
+  },
+  {
+    "code": "TOPO",
+    "label": "Topographical",
+    "raw": "TOPO",
+    "count": 8
+  },
+  {
+    "code": "TRAY",
+    "label": "Cable tray / Containment",
+    "raw": "TRAY",
+    "count": 1
+  },
+  {
+    "code": "UTIL",
+    "label": "Utilities / Incoming Services",
+    "raw": "UTIL",
+    "count": 2
+  },
+  {
+    "code": "WALL",
+    "label": "Walls (including Cladding)",
+    "raw": "WALL",
+    "count": 2
+  },
+  {
+    "code": "XXX",
+    "label": "Observed legacy naming slot (no matching Classification field label)",
+    "raw": "XXX",
+    "count": 6
+  },
+  {
+    "code": "XXXX",
+    "label": "Not Applicable",
+    "raw": "XXXX",
+    "count": 98
+  },
+  {
+    "code": "ZZZZ",
+    "label": "Multiple Classifications",
+    "raw": "ZZZZ",
+    "count": 50
+  }
+]

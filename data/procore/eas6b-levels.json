@@ -1,0 +1,62 @@
+[
+  {
+    "code": "B2",
+    "label": "Basement Level 2",
+    "raw": "Basement Level 2",
+    "notes": "Where a basement is provided. Basements are the only levels with a letter prefix"
+  },
+  {
+    "code": "B1",
+    "label": "Basement Level 1",
+    "raw": "Basement Level 1",
+    "notes": "Where a basement is provided. Basements are the only levels with a letter prefix"
+  },
+  {
+    "code": "00",
+    "label": "Level 0 (Ground EMEA)",
+    "raw": "Level 0 (Ground EMEA)",
+    "notes": "Ground floor designation for EMEA.  Do not use any letters."
+  },
+  {
+    "code": "01",
+    "label": "Level 1 (Ground in AMER)",
+    "raw": "Level 1 (Ground in AMER)",
+    "notes": "Ground floor designation for AMER"
+  },
+  {
+    "code": "02",
+    "label": "Level 2",
+    "raw": "Level 2",
+    "notes": "Continue numbering each floor in sequence"
+  },
+  {
+    "code": "03",
+    "label": "Level 3",
+    "raw": "Level 3",
+    "notes": null
+  },
+  {
+    "code": "04",
+    "label": "Level 4",
+    "raw": "Level 4",
+    "notes": "This example is when the roof is above Level 3"
+  },
+  {
+    "code": "05",
+    "label": "Level 5",
+    "raw": "Level 5",
+    "notes": "This example is when the gantry is above a roof above Level 3"
+  },
+  {
+    "code": "06",
+    "label": "Level 6",
+    "raw": "Level 6",
+    "notes": "Continue numbering each level in sequence.  Do not add any special designators"
+  },
+  {
+    "code": "XX",
+    "label": "Not Applicable",
+    "raw": "Not Applicable",
+    "notes": "Apply only to electronic file name"
+  }
+]

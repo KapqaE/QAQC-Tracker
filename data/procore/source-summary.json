@@ -1,0 +1,61 @@
+{
+  "source": "Documents - All Documents (10).csv",
+  "rowCount": 205,
+  "validStructuredNames": 204,
+  "invalidStructuredNames": 1,
+  "coreMismatchCount": 0,
+  "namingObservations": {
+    "namesWithSuffix": 5,
+    "locationSlotDiffersFromLocationField": 105,
+    "classificationSlotDiffersFromClassificationField": 6,
+    "projectPrefixes": [
+      {
+        "code": "IL051",
+        "count": 203
+      },
+      {
+        "code": "IL05",
+        "count": 1
+      }
+    ]
+  },
+  "duplicateDocumentCodes": [],
+  "requiredColumns": [
+    "Name",
+    "Description",
+    "Type",
+    "Revision",
+    "Version",
+    "Status",
+    "Originator",
+    "Volume / System",
+    "Location",
+    "Discipline",
+    "Number",
+    "Classification",
+    "Project Stage",
+    "File",
+    "Date Uploaded",
+    "Date Updated",
+    "Project"
+  ],
+  "missingRequiredValues": {
+    "Name": 0,
+    "Description": 0,
+    "Type": 0,
+    "Revision": 0,
+    "Version": 0,
+    "Status": 0,
+    "Originator": 0,
+    "Volume / System": 0,
+    "Location": 0,
+    "Discipline": 0,
+    "Number": 0,
+    "Classification": 0,
+    "Project Stage": 0,
+    "File": 0,
+    "Date Uploaded": 0,
+    "Date Updated": 0,
+    "Project": 0
+  }
+}

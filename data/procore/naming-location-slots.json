@@ -1,0 +1,74 @@
+[
+  {
+    "code": "00",
+    "label": "Ground",
+    "raw": "00",
+    "count": 1
+  },
+  {
+    "code": "00C",
+    "label": "Observed naming slot (no label in the Procore Location field)",
+    "raw": "00C",
+    "count": 2
+  },
+  {
+    "code": "00Z",
+    "label": "Observed naming slot (no label in the Procore Location field)",
+    "raw": "00Z",
+    "count": 3
+  },
+  {
+    "code": "01Z",
+    "label": "Observed naming slot (no label in the Procore Location field)",
+    "raw": "01Z",
+    "count": 3
+  },
+  {
+    "code": "02Z",
+    "label": "Observed naming slot (no label in the Procore Location field)",
+    "raw": "02Z",
+    "count": 1
+  },
+  {
+    "code": "B1C",
+    "label": "Observed naming slot (no label in the Procore Location field)",
+    "raw": "B1C",
+    "count": 4
+  },
+  {
+    "code": "B1Z",
+    "label": "Observed naming slot (no label in the Procore Location field)",
+    "raw": "B1Z",
+    "count": 3
+  },
+  {
+    "code": "XX",
+    "label": "Non Applicable",
+    "raw": "XX",
+    "count": 98
+  },
+  {
+    "code": "XXX",
+    "label": "Observed naming slot (no label in the Procore Location field)",
+    "raw": "XXX",
+    "count": 39
+  },
+  {
+    "code": "XXZ",
+    "label": "Observed naming slot (no label in the Procore Location field)",
+    "raw": "XXZ",
+    "count": 5
+  },
+  {
+    "code": "Z",
+    "label": "Observed naming slot (no label in the Procore Location field)",
+    "raw": "Z",
+    "count": 19
+  },
+  {
+    "code": "ZZZ",
+    "label": "Observed naming slot (no label in the Procore Location field)",
+    "raw": "ZZZ",
+    "count": 26
+  }
+]

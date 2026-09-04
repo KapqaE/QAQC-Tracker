@@ -1,0 +1,122 @@
+[
+  {
+    "code": "0",
+    "label": "0",
+    "raw": "0",
+    "count": 12
+  },
+  {
+    "code": "00",
+    "label": "00",
+    "raw": "00",
+    "count": 3
+  },
+  {
+    "code": "02",
+    "label": "02",
+    "raw": "02",
+    "count": 2
+  },
+  {
+    "code": "03",
+    "label": "03",
+    "raw": "03",
+    "count": 1
+  },
+  {
+    "code": "1",
+    "label": "1",
+    "raw": "1",
+    "count": 4
+  },
+  {
+    "code": "2",
+    "label": "2",
+    "raw": "2",
+    "count": 2
+  },
+  {
+    "code": "C00",
+    "label": "C00",
+    "raw": "C00",
+    "count": 3
+  },
+  {
+    "code": "C01",
+    "label": "C01",
+    "raw": "C01",
+    "count": 10
+  },
+  {
+    "code": "C02",
+    "label": "C02",
+    "raw": "C02",
+    "count": 1
+  },
+  {
+    "code": "C03",
+    "label": "C03",
+    "raw": "C03",
+    "count": 3
+  },
+  {
+    "code": "C05",
+    "label": "C05",
+    "raw": "C05",
+    "count": 1
+  },
+  {
+    "code": "P00",
+    "label": "P00",
+    "raw": "P00",
+    "count": 15
+  },
+  {
+    "code": "P01",
+    "label": "P01",
+    "raw": "P01",
+    "count": 26
+  },
+  {
+    "code": "P02",
+    "label": "P02",
+    "raw": "P02",
+    "count": 8
+  },
+  {
+    "code": "P04",
+    "label": "P04",
+    "raw": "P04",
+    "count": 2
+  },
+  {
+    "code": "R0.0",
+    "label": "R0.0",
+    "raw": "R0.0",
+    "count": 3
+  },
+  {
+    "code": "R00",
+    "label": "R00",
+    "raw": "R00",
+    "count": 83
+  },
+  {
+    "code": "R01",
+    "label": "R01",
+    "raw": "R01",
+    "count": 13
+  },
+  {
+    "code": "R02",
+    "label": "R02",
+    "raw": "R02",
+    "count": 6
+  },
+  {
+    "code": "R03",
+    "label": "R03",
+    "raw": "R03",
+    "count": 7
+  }
+]

@@ -1,0 +1,85 @@
+{
+  "source": "Documents - All Documents (10).csv",
+  "detectedStructure": [
+    "project",
+    "type",
+    "discipline",
+    "number",
+    "location_slot",
+    "volume_system",
+    "classification",
+    "originator"
+  ],
+  "separator": "-",
+  "projectPrefixes": [
+    {
+      "code": "IL051",
+      "count": 203
+    },
+    {
+      "code": "IL05",
+      "count": 1
+    }
+  ],
+  "typeLocationSlots": {
+    "PT": {
+      "XX": 2
+    },
+    "BE": {
+      "XX": 1
+    },
+    "CA": {
+      "XXX": 1
+    },
+    "CF": {
+      "XX": 1
+    },
+    "DR": {
+      "XXX": 15,
+      "ZZZ": 26,
+      "00Z": 3,
+      "01Z": 3,
+      "B1Z": 3,
+      "02Z": 1,
+      "00C": 2,
+      "B1C": 4
+    },
+    "IP": {
+      "XX": 13
+    },
+    "MS": {
+      "Z": 19
+    },
+    "PL": {
+      "00": 1,
+      "XX": 20
+    },
+    "PP": {
+      "XX": 12,
+      "XXX": 1
+    },
+    "PR": {
+      "XX": 1
+    },
+    "RG": {
+      "XX": 3,
+      "XXX": 2
+    },
+    "RP": {
+      "XX": 21,
+      "XXX": 5,
+      "XXZ": 1
+    },
+    "SC": {
+      "XXZ": 4
+    },
+    "SH": {
+      "XX": 10
+    },
+    "TS": {
+      "XXX": 15,
+      "XX": 14
+    }
+  },
+  "note": "Imported Name values remain authoritative. The generated code uses the first eight hyphen-delimited segments; suffixes are preserved separately."
+}

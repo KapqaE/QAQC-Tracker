@@ -1,0 +1,20 @@
+[
+  {
+    "code": "00",
+    "label": "Ground",
+    "raw": "00 - Ground",
+    "count": 6
+  },
+  {
+    "code": "01",
+    "label": "Level 1",
+    "raw": "01 - Level 1",
+    "count": 3
+  },
+  {
+    "code": "XX",
+    "label": "Non Applicable",
+    "raw": "XX - Non Applicable",
+    "count": 196
+  }
+]

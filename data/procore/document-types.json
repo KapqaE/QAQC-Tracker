@@ -1,0 +1,92 @@
+[
+  {
+    "code": "BE",
+    "label": "Benchmark & Mock-up",
+    "raw": "BE - Benchmark & Mock-up",
+    "count": 1
+  },
+  {
+    "code": "CA",
+    "label": "Calculations",
+    "raw": "CA - Calculations",
+    "count": 1
+  },
+  {
+    "code": "CF",
+    "label": "Certificate",
+    "raw": "CF - Certificate",
+    "count": 1
+  },
+  {
+    "code": "DR",
+    "label": "2D Drawing",
+    "raw": "DR - 2D Drawing",
+    "count": 57
+  },
+  {
+    "code": "IP",
+    "label": "Inspection Test Plan",
+    "raw": "IP - Inspection Test Plan",
+    "count": 13
+  },
+  {
+    "code": "MS",
+    "label": "Risk Assessment / Method statement (RAMS)",
+    "raw": "MS - Risk Assessment / Method statement (RAMS)",
+    "count": 20
+  },
+  {
+    "code": "PL",
+    "label": "Management Plan",
+    "raw": "PL - Management Plan",
+    "count": 21
+  },
+  {
+    "code": "PP",
+    "label": "Presentation",
+    "raw": "PP - Presentation",
+    "count": 13
+  },
+  {
+    "code": "PR",
+    "label": "Programme (Legacy)",
+    "raw": "PR - Programme (Legacy)",
+    "count": 1
+  },
+  {
+    "code": "PT",
+    "label": "Protocol / Policy",
+    "raw": "PT - Protocol / Policy",
+    "count": 2
+  },
+  {
+    "code": "RG",
+    "label": "Register / List",
+    "raw": "RG - Register / List",
+    "count": 5
+  },
+  {
+    "code": "RP",
+    "label": "Report",
+    "raw": "RP - Report",
+    "count": 27
+  },
+  {
+    "code": "SC",
+    "label": "Schematic (Legacy)",
+    "raw": "SC - Schematic (Legacy)",
+    "count": 4
+  },
+  {
+    "code": "SH",
+    "label": "Schedule / Gantt",
+    "raw": "SH - Schedule / Gantt",
+    "count": 10
+  },
+  {
+    "code": "TS",
+    "label": "Technical Submittal",
+    "raw": "TS - Technical Submittal",
+    "count": 29
+  }
+]

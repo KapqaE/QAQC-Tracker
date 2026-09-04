@@ -1,0 +1,140 @@
+[
+  {
+    "code": "BH",
+    "label": "Back of House",
+    "raw": "BH - Back of House",
+    "notes": null
+  },
+  {
+    "code": "DC",
+    "label": "Data Center",
+    "raw": "DC - Data Center",
+    "notes": null
+  },
+  {
+    "code": "FH",
+    "label": "Front of House",
+    "raw": "FH - Front of House",
+    "notes": null
+  },
+  {
+    "code": "FU",
+    "label": "Fuel Tanks",
+    "raw": "FU - Fuel Tanks",
+    "notes": null
+  },
+  {
+    "code": "GN",
+    "label": "Generator Building",
+    "raw": "GN - Generator Building",
+    "notes": null
+  },
+  {
+    "code": "GT",
+    "label": "Gantry (Including Generator Compound)",
+    "raw": "GT - Gantry (Including Generator Compound)",
+    "notes": null
+  },
+  {
+    "code": "HC",
+    "label": "Horizontal Circulation (Corridors)",
+    "raw": "HC - Horizontal Circulation (Corridors)",
+    "notes": null
+  },
+  {
+    "code": "L1",
+    "label": "Link Bridge 1",
+    "raw": "L1 - Link Bridge 1",
+    "notes": null
+  },
+  {
+    "code": "L2",
+    "label": "Link Bridge 2",
+    "raw": "L2 - Link Bridge 2",
+    "notes": null
+  },
+  {
+    "code": "L3",
+    "label": "Link Bridge 3",
+    "raw": "L3 - Link Bridge 3",
+    "notes": null
+  },
+  {
+    "code": "LB",
+    "label": "Logistics Building",
+    "raw": "LB - Logistics Building",
+    "notes": null
+  },
+  {
+    "code": "LS",
+    "label": "Landscape",
+    "raw": "LS - Landscape",
+    "notes": null
+  },
+  {
+    "code": "OS",
+    "label": "Office Space",
+    "raw": "OS - Office Space",
+    "notes": null
+  },
+  {
+    "code": "PA",
+    "label": "Parking",
+    "raw": "PA - Parking",
+    "notes": null
+  },
+  {
+    "code": "RF",
+    "label": "Roof",
+    "raw": "RF - Roof",
+    "notes": null
+  },
+  {
+    "code": "SS",
+    "label": "Substation",
+    "raw": "SS - Substation",
+    "notes": null
+  },
+  {
+    "code": "ST",
+    "label": "Storage",
+    "raw": "ST - Storage",
+    "notes": null
+  },
+  {
+    "code": "TR",
+    "label": "Technical Rooms (e.g. Plant rooms)",
+    "raw": "TR - Technical Rooms (e.g. Plant rooms)",
+    "notes": null
+  },
+  {
+    "code": "VC",
+    "label": "Vertical Circulation (Lift / Stairwell / Risers)",
+    "raw": "VC - Vertical Circulation (Lift / Stairwell / Risers)",
+    "notes": null
+  },
+  {
+    "code": "WA",
+    "label": "Water Tanks",
+    "raw": "WA - Water Tanks",
+    "notes": null
+  },
+  {
+    "code": "WT",
+    "label": "Water Treatment",
+    "raw": "WT - Water Treatment",
+    "notes": null
+  },
+  {
+    "code": "XX",
+    "label": "Not applicable",
+    "raw": "XX - Not applicable",
+    "notes": null
+  },
+  {
+    "code": "ZZ",
+    "label": "Multiple Volumes",
+    "raw": "ZZ - Multiple Volumes",
+    "notes": null
+  }
+]
