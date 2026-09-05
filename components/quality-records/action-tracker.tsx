@@ -1,5 +1,6 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
 import { useState, useTransition } from 'react';
 import { LoaderCircle, Plus, Save } from 'lucide-react';
 
@@ -42,6 +43,7 @@ export function ActionTracker({
   parentId: string;
   addAction: Action;
 }) {
+  const router = useRouter();
   const [open, setOpen] = useState(false);
   const [pending, startTransition] = useTransition();
   const [feedback, setFeedback] = useState<CrudActionResult | null>(null);
@@ -51,9 +53,11 @@ export function ActionTracker({
     formData.set('parent_record_type', parentType);
     formData.set('parent_record_id', parentId);
     startTransition(async () => {
-      const result = await addAction(formData);
-      setFeedback(result);
-      if (result.success) setOpen(false);
+      try {
+        const result = await addAction(formData);
+        setFeedback(result);
+        if (result.success) { setOpen(false); router.refresh(); }
+      } catch { setFeedback({ success: false, message: 'Action could not be saved. Please retry.' }); }
     });
   }
 
@@ -61,7 +65,11 @@ export function ActionTracker({
     formData.set('parent_record_type', parentType);
     formData.set('parent_record_id', parentId);
     startTransition(async () => {
-      setFeedback(await updateQualityAction(formData));
+      try {
+        const result = await updateQualityAction(formData);
+        setFeedback(result);
+        if (result.success) router.refresh();
+      } catch { setFeedback({ success: false, message: 'Action could not be updated. Please retry.' }); }
     });
   }
 
@@ -105,7 +113,7 @@ export function ActionTracker({
         {feedback ? <p className={`border-t px-4 py-2 text-xs ${feedback.success ? 'text-emerald-700' : 'text-red-700'}`}>{feedback.message}</p> : null}
       </CardContent>
 
-      <Dialog open={open} onOpenChange={setOpen}>
+      <Dialog open={open} onOpenChange={(value) => { if (!pending) setOpen(value); }}>
         <DialogContent>
           <DialogHeader><DialogTitle>Add action</DialogTitle><DialogDescription>The action remains linked to this {parentType} record.</DialogDescription></DialogHeader>
           <form action={submit} className="space-y-4">
@@ -115,7 +123,7 @@ export function ActionTracker({
               <div><label htmlFor="quality-action-due" className="mb-1 block text-xs font-medium">Due date</label><Input id="quality-action-due" name="due_date" type="date" required /></div>
             </div>
             {feedback && !feedback.success ? <p className="text-xs text-red-700">{feedback.message}</p> : null}
-            <DialogFooter><Button type="button" variant="outline" onClick={() => setOpen(false)}>Cancel</Button><Button type="submit" disabled={pending}>{pending ? <LoaderCircle className="animate-spin" /> : <Plus />}Add action</Button></DialogFooter>
+            <DialogFooter><Button type="button" variant="outline" disabled={pending} onClick={() => setOpen(false)}>Cancel</Button><Button type="submit" disabled={pending}>{pending ? <LoaderCircle className="animate-spin" /> : <Plus />}Add action</Button></DialogFooter>
           </form>
         </DialogContent>
       </Dialog>

@@ -42,7 +42,7 @@ export function CrudManager({ title, description, noun, rows, columns, fields, c
     setFeedback(null);
     if (editing?.id) formData.set('id', editing.id);
     startTransition(async () => {
-      const result = editing?.id ? await updateAction(formData) : await createAction(formData);
+      let result; try { result = editing?.id ? await updateAction(formData) : await createAction(formData); } catch { result = { success: false, message: 'Save failed. Check your connection and try again.' }; }
       setFeedback(result);
       if (result.success) {
         setEditing(undefined);
@@ -57,7 +57,7 @@ export function CrudManager({ title, description, noun, rows, columns, fields, c
     formData.set('id', deleting.id);
     setFeedback(null);
     startTransition(async () => {
-      const result = await deleteAction(formData);
+      let result; try { result = await deleteAction(formData); } catch { result = { success: false, message: 'Delete failed. Check your connection and try again.' }; }
       setFeedback(result);
       if (result.success) {
         setDeleting(null);
@@ -72,7 +72,7 @@ export function CrudManager({ title, description, noun, rows, columns, fields, c
     <div className="mx-auto flex w-full max-w-[1600px] flex-col gap-5">
       <div className="flex flex-col justify-between gap-4 xl:flex-row xl:items-end">
         <div><p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-primary">Quality register</p><h1 className="mt-1.5 text-2xl font-semibold tracking-tight sm:text-[30px]">{title}</h1><p className="mt-1.5 max-w-2xl text-sm leading-6 text-muted-foreground">{description}</p></div>
-        <Button size="lg" onClick={() => { setEditing(null); setFeedback(null); }}><Plus data-icon="inline-start" />New {noun}</Button>
+        <Button size="lg" onClick={() => { setEditing(null); setFeedback(null); }}><Plus data-icon="inline-start" />Create {noun}</Button>
       </div>
 
       {feedback ? <output className={`flex items-start justify-between gap-3 rounded-lg border px-4 py-3 text-xs ${feedback.success ? 'border-emerald-200 bg-emerald-50 text-emerald-800' : 'border-red-200 bg-red-50 text-red-800'}`}><span>{feedback.message}</span><button type="button" onClick={() => setFeedback(null)} aria-label="Dismiss message"><X className="size-3.5" /></button></output> : null}
@@ -96,7 +96,7 @@ export function CrudManager({ title, description, noun, rows, columns, fields, c
             {columns.map((column) => <TableCell key={column.key} className="max-w-[320px] py-3 first:pl-4">{renderCell(row, column)}</TableCell>)}
             <TableCell className="pr-4"><div className="flex justify-end gap-1"><Button variant="ghost" size="icon-sm" onClick={() => { setEditing(row); setFeedback(null); }} aria-label={`Edit ${noun}`}><Pencil /></Button><Button variant="ghost" size="icon-sm" className="text-red-600 hover:bg-red-50 hover:text-red-700" onClick={() => { setDeleting(row); setFeedback(null); }} aria-label={`Delete ${noun}`}><Trash2 /></Button></div></TableCell>
           </TableRow>)}</TableBody>
-        </Table> : <Empty className="m-4 min-h-64 border"><EmptyHeader><EmptyMedia variant="icon"><Database /></EmptyMedia><EmptyTitle>{filtersActive ? 'No matching records' : `No ${title.toLowerCase()} yet`}</EmptyTitle><EmptyDescription>{filtersActive ? 'Adjust or clear the filters to see more records.' : `Create the first ${noun} to start this register.`}</EmptyDescription></EmptyHeader>{!filtersActive ? <Button size="sm" onClick={() => setEditing(null)}><Plus />New {noun}</Button> : null}</Empty>}
+        </Table> : <Empty className="m-4 min-h-64 border"><EmptyHeader><EmptyMedia variant="icon"><Database /></EmptyMedia><EmptyTitle>{filtersActive ? 'No matching records' : `No ${title.toLowerCase()} yet`}</EmptyTitle><EmptyDescription>{filtersActive ? 'Adjust or clear the filters to see more records.' : `Create the first ${noun} to start this register.`}</EmptyDescription></EmptyHeader>{!filtersActive ? <Button size="sm" onClick={() => setEditing(null)}><Plus />Create {noun}</Button> : null}</Empty>}
       </Card>
 
       <Dialog open={editing !== undefined} onOpenChange={(open) => { if (!open && !isPending) setEditing(undefined); }}>

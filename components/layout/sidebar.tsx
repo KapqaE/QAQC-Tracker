@@ -46,7 +46,7 @@ export function Sidebar({ currentUser, activeProject }: { currentUser: Profile; 
         <div className="mt-2 text-sm font-medium leading-5">{activeProject?.name ?? 'No active project'}</div>
         <div className="mt-1 font-mono text-[11px] text-sidebar-foreground/50">{activeProject ? `${activeProject.project_code} · ${activeProject.status}` : 'Create a project to begin'}</div>
         {!activeProject ? <Link href="/projects?create=1" className="mt-3 inline-flex items-center gap-1.5 text-xs font-medium text-teal-200 hover:text-white"><Building2 className="size-3.5" />Create Project</Link> : null}
-        <div className="mt-3 h-1 overflow-hidden rounded-full bg-white/10"><div className="h-full w-2/3 rounded-full bg-sidebar-primary" /></div>
+        
       </div>
 
       <nav className="flex-1 px-3 py-5" aria-label="Primary navigation">

@@ -19,7 +19,7 @@ export function ProjectSelector({
 }) {
   const router = useRouter();
   const menu = useRef<HTMLDetailsElement>(null);
-  const [error, setError] = useState(loadError ?? null);
+  const [error, setError] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
 
   function selectProject(projectId: string) {
@@ -28,7 +28,9 @@ export function ProjectSelector({
     const formData = new FormData();
     formData.set('project_id', projectId);
     startTransition(async () => {
-      const result = await selectActiveProjectAction(formData);
+      let result;
+      try { result = await selectActiveProjectAction(formData); }
+      catch { setError('Project selection failed. Check your connection and try again.'); return; }
       if (!result.success) {
         setError(result.message);
         return;
@@ -39,19 +41,19 @@ export function ProjectSelector({
   }
 
   return (
-    <details ref={menu} className="group relative hidden sm:block">
+    <details ref={menu} className="group relative min-w-0">
       <summary className="flex max-w-[300px] cursor-pointer list-none items-center gap-2 rounded-lg px-1.5 py-1 text-left hover:bg-muted [&::-webkit-details-marker]:hidden" aria-label="Change active project">
         <span className="grid size-8 shrink-0 place-items-center rounded-md bg-secondary text-secondary-foreground"><Building2 className="size-4" /></span>
         <span className="min-w-0 flex-1"><span className="block truncate text-xs font-medium">{activeProject?.name ?? 'No active project'}</span><span className="block truncate text-[10px] text-muted-foreground">{activeProject ? `${activeProject.project_code} · ${activeProject.location}` : 'Create a project to begin'}</span></span>
         {isPending ? <LoaderCircle className="size-3.5 shrink-0 animate-spin text-muted-foreground" /> : <ChevronDown className="size-3.5 shrink-0 text-muted-foreground transition-transform group-open:rotate-180" />}
       </summary>
 
-      <div className="absolute left-0 top-12 z-50 w-80 rounded-xl border bg-popover p-2 shadow-xl">
+      <div className="absolute left-0 top-12 z-50 w-[min(20rem,85vw)] rounded-xl border bg-popover p-2 shadow-xl">
         <div className="px-2 pb-2 pt-1">
           <p className="text-xs font-semibold">Active project</p>
           <p className="mt-0.5 text-[10px] text-muted-foreground">Choose the project context used across QA/QC records.</p>
         </div>
-        {error ? <p className="mx-1 mb-2 rounded-md border border-red-200 bg-red-50 px-2.5 py-2 text-[11px] text-red-800">{error}</p> : null}
+        {(error || loadError) ? <p className="mx-1 mb-2 rounded-md border border-red-200 bg-red-50 px-2.5 py-2 text-[11px] text-red-800">{error || loadError}</p> : null}
         {projects.length ? <div className="max-h-64 space-y-1 overflow-y-auto border-y py-2">
           {projects.map((project) => {
             const selected = project.id === activeProject?.id;
