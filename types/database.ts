@@ -13,6 +13,7 @@ type ProfileRow = {
   job_title: string | null;
   company: string | null;
   avatar_url: string | null;
+  active_project_id: string | null;
   created_at: string;
   updated_at: string;
 };
@@ -21,6 +22,8 @@ type ProjectRow = {
   name: string;
   project_code: string;
   client: string;
+  contractor: string | null;
+  consultant: string | null;
   location: string;
   description: string | null;
   start_date: string | null;

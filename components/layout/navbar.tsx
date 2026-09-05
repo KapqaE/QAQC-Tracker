@@ -2,11 +2,13 @@ import { Bell, ChevronDown, Menu, ShieldCheck } from 'lucide-react';
 import Link from 'next/link';
 
 import { logoutAction } from '@/app/actions/auth';
+import { ProjectSelector } from '@/components/layout/project-selector';
 import { Button } from '@/components/ui/button';
 import type { Profile, Project } from '@/types/qaqc';
 
 const mobileItems = [
   { label: 'Dashboard', href: '/' },
+  { label: 'Projects', href: '/projects' },
   { label: 'WIR', href: '/wir' },
   { label: 'MIR', href: '/mir' },
   { label: 'NCR', href: '/ncr' },
@@ -17,7 +19,7 @@ const mobileItems = [
   { label: 'Settings', href: '/settings' },
 ];
 
-export function Navbar({ currentUser, activeProject, unreadNotifications }: { currentUser: Profile; activeProject: Project | null; unreadNotifications: number }) {
+export function Navbar({ currentUser, projects, activeProject, projectLoadError, unreadNotifications }: { currentUser: Profile; projects: Project[]; activeProject: Project | null; projectLoadError?: string | null; unreadNotifications: number }) {
   const initials = (currentUser.full_name || currentUser.email).split(/\s+/).map((part) => part[0]).join('').slice(0, 2).toUpperCase();
   return (
     <header className="sticky top-0 z-30 flex h-[69px] items-center justify-between border-b bg-card/95 px-4 backdrop-blur-md sm:px-6 lg:px-8">
@@ -29,11 +31,7 @@ export function Navbar({ currentUser, activeProject, unreadNotifications }: { cu
             {mobileItems.map((item) => <Link key={item.label} href={item.href} className={`block rounded-lg px-3 py-2 text-sm ${item.label === 'Dashboard' ? 'bg-accent font-medium text-accent-foreground' : 'text-muted-foreground hover:bg-muted hover:text-foreground'}`}>{item.label}</Link>)}
           </nav>
         </details>
-        <button className="hidden max-w-[280px] items-center gap-2 text-left sm:flex" aria-label="Change active project">
-          <span className="grid size-8 shrink-0 place-items-center rounded-md bg-secondary text-secondary-foreground"><BuildingMark /></span>
-          <span className="min-w-0"><span className="block truncate text-xs font-medium">{activeProject?.name ?? 'No active project'}</span><span className="block truncate text-[10px] text-muted-foreground">{activeProject ? `${activeProject.client} · ${activeProject.location}` : 'Create a project to begin'}</span></span>
-          <ChevronDown className="size-3.5 shrink-0 text-muted-foreground" />
-        </button>
+        <ProjectSelector projects={projects} activeProject={activeProject} loadError={projectLoadError} />
       </div>
 
       <div className="mx-6 hidden items-center gap-2 rounded-full border bg-muted/45 px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.12em] text-muted-foreground lg:flex"><ShieldCheck className="size-3.5 text-emerald-600" />Authenticated data workspace</div>
@@ -44,8 +42,4 @@ export function Navbar({ currentUser, activeProject, unreadNotifications }: { cu
       </div>
     </header>
   );
-}
-
-function BuildingMark() {
-  return <span className="relative block size-4 border-b-2 border-primary before:absolute before:bottom-0 before:left-0 before:h-3 before:w-1.5 before:bg-primary after:absolute after:bottom-0 after:right-0 after:h-4 after:w-1.5 after:bg-primary/55" aria-hidden="true" />;
 }

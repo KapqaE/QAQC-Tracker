@@ -2,6 +2,7 @@
 
 import { useMemo, useState, useTransition } from 'react';
 import { AlertTriangle, Database, LoaderCircle, Pencil, Plus, Search, Trash2, X } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 
 import type { CrudActionResult } from '@/app/actions/records';
 import { StatusBadge } from '@/components/shared/status-badge';
@@ -18,12 +19,13 @@ export type CrudColumn = { key: string; label: string; style?: 'primary' | 'mono
 export type CrudField = { name: string; label: string; type?: 'text' | 'date' | 'textarea' | 'select'; required?: boolean; options?: { label: string; value: string }[]; placeholder?: string; span?: 1 | 2; defaultValue?: string };
 type CrudAction = (formData: FormData) => Promise<CrudActionResult>;
 
-export function CrudManager({ title, description, noun, rows, columns, fields, createAction, updateAction, deleteAction, loadError, enableDiscipline = false, enableProject = false }: { title: string; description: string; noun: string; rows: CrudRow[]; columns: CrudColumn[]; fields: CrudField[]; createAction: CrudAction; updateAction: CrudAction; deleteAction: CrudAction; loadError?: string | null; enableDiscipline?: boolean; enableProject?: boolean }) {
+export function CrudManager({ title, description, noun, rows, columns, fields, createAction, updateAction, deleteAction, loadError, enableDiscipline = false, enableProject = false, initialCreate = false }: { title: string; description: string; noun: string; rows: CrudRow[]; columns: CrudColumn[]; fields: CrudField[]; createAction: CrudAction; updateAction: CrudAction; deleteAction: CrudAction; loadError?: string | null; enableDiscipline?: boolean; enableProject?: boolean; initialCreate?: boolean }) {
+  const router = useRouter();
   const [search, setSearch] = useState('');
   const [status, setStatus] = useState('');
   const [discipline, setDiscipline] = useState('');
   const [project, setProject] = useState('');
-  const [editing, setEditing] = useState<CrudRow | null | undefined>(undefined);
+  const [editing, setEditing] = useState<CrudRow | null | undefined>(initialCreate ? null : undefined);
   const [deleting, setDeleting] = useState<CrudRow | null>(null);
   const [feedback, setFeedback] = useState<CrudActionResult | null>(loadError ? { success: false, message: loadError } : null);
   const [isPending, startTransition] = useTransition();
@@ -42,7 +44,10 @@ export function CrudManager({ title, description, noun, rows, columns, fields, c
     startTransition(async () => {
       const result = editing?.id ? await updateAction(formData) : await createAction(formData);
       setFeedback(result);
-      if (result.success) setEditing(undefined);
+      if (result.success) {
+        setEditing(undefined);
+        router.refresh();
+      }
     });
   }
 
@@ -54,7 +59,10 @@ export function CrudManager({ title, description, noun, rows, columns, fields, c
     startTransition(async () => {
       const result = await deleteAction(formData);
       setFeedback(result);
-      if (result.success) setDeleting(null);
+      if (result.success) {
+        setDeleting(null);
+        router.refresh();
+      }
     });
   }
 

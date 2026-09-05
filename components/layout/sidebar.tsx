@@ -2,6 +2,7 @@
 
 import {
   BarChart3,
+  Building2,
   ClipboardCheck,
   ClipboardList,
   FileStack,
@@ -40,17 +41,18 @@ export function Sidebar({ currentUser, activeProject }: { currentUser: Profile; 
 
       <div className="mx-4 mt-5 rounded-lg border border-sidebar-border bg-sidebar-accent/60 p-3">
         <div className="flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.12em] text-sidebar-foreground/45">
-          <span className="size-1.5 rounded-full bg-emerald-400" /> Active project
+          <span className={`size-1.5 rounded-full ${activeProject ? 'bg-emerald-400' : 'bg-amber-400'}`} /> {activeProject ? 'Active project' : 'Project required'}
         </div>
         <div className="mt-2 text-sm font-medium leading-5">{activeProject?.name ?? 'No active project'}</div>
         <div className="mt-1 font-mono text-[11px] text-sidebar-foreground/50">{activeProject ? `${activeProject.project_code} · ${activeProject.status}` : 'Create a project to begin'}</div>
+        {!activeProject ? <Link href="/projects?create=1" className="mt-3 inline-flex items-center gap-1.5 text-xs font-medium text-teal-200 hover:text-white"><Building2 className="size-3.5" />Create Project</Link> : null}
         <div className="mt-3 h-1 overflow-hidden rounded-full bg-white/10"><div className="h-full w-2/3 rounded-full bg-sidebar-primary" /></div>
       </div>
 
       <nav className="flex-1 px-3 py-5" aria-label="Primary navigation">
         <p className="mb-2 px-3 text-[10px] font-semibold uppercase tracking-[0.14em] text-sidebar-foreground/35">Workspace</p>
         <ul className="space-y-1">
-          {[{ label: 'Dashboard', icon: LayoutDashboard, href: '/' }].map(({ label, icon: Icon, href }) => {
+          {[{ label: 'Dashboard', icon: LayoutDashboard, href: '/' }, { label: 'Projects', icon: Building2, href: '/projects' }].map(({ label, icon: Icon, href }) => {
             const active = pathname === href;
             return (
             <li key={label}>
