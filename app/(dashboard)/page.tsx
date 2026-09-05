@@ -1,4 +1,4 @@
-import { AlertTriangle, CheckCircle2, ClipboardCheck, FileWarning, ListChecks, PackageCheck, PanelsTopLeft, ShieldCheck } from 'lucide-react';
+import { AlertTriangle, Building2, CheckCircle2, ClipboardCheck, FileWarning, ListChecks, PackageCheck, PanelsTopLeft, ShieldCheck } from 'lucide-react';
 import Link from 'next/link';
 
 import { MetricCard } from '@/components/dashboard/metric-card';
@@ -7,23 +7,30 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { getQualityDashboard } from '@/lib/services/quality-dashboard';
+import { listProjects } from '@/lib/services/projects';
 import { createClient } from '@/lib/supabase/server';
 
 export const dynamic = 'force-dynamic';
 
 export default async function DashboardPage() {
   const client = await createClient();
-  const data = await getQualityDashboard(client);
+  const [data, projectsResult] = await Promise.all([
+    getQualityDashboard(client),
+    listProjects(client),
+  ]);
   const { metrics } = data;
+  const hasProjects = projectsResult.data.length > 0;
 
   return (
     <div className="mx-auto flex w-full max-w-[1600px] flex-col gap-6">
       <section className="flex flex-col justify-between gap-4 xl:flex-row xl:items-end">
         <div><div className="mb-2 text-xs font-semibold uppercase tracking-[0.12em] text-primary">QA/QC Records V2</div><h1 className="text-2xl font-semibold tracking-tight sm:text-[30px]">Quality control overview</h1><p className="mt-1.5 max-w-2xl text-sm leading-6 text-muted-foreground">Live Supabase records across WIR, MIR, NCR, SOR and room readiness. No dashboard values are mocked.</p></div>
-        <Button nativeButton={false} size="lg" render={<Link href="/wir" />}><ClipboardCheck data-icon="inline-start" />Create WIR</Button>
+        <Button nativeButton={false} size="lg" render={<Link href={hasProjects ? '/wir' : '/projects?create=1'} />}>{hasProjects ? <ClipboardCheck data-icon="inline-start" /> : <Building2 data-icon="inline-start" />}{hasProjects ? 'Create WIR' : 'Create Project'}</Button>
       </section>
 
       {data.error ? <div className="flex items-center gap-2 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-xs text-amber-900"><AlertTriangle className="size-4 shrink-0" />{data.error}</div> : null}
+      {projectsResult.error ? <div className="flex items-center gap-2 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-xs text-red-900"><AlertTriangle className="size-4 shrink-0" />{projectsResult.error}</div> : null}
+      {!projectsResult.error && !hasProjects ? <Card className="border-primary/25 bg-primary/[0.035]"><CardContent className="flex flex-col items-start justify-between gap-4 p-5 sm:flex-row sm:items-center"><div className="flex items-start gap-3"><span className="grid size-10 shrink-0 place-items-center rounded-lg bg-primary text-primary-foreground"><Building2 className="size-5" /></span><div><h2 className="text-sm font-semibold">Create your first project</h2><p className="mt-1 max-w-2xl text-xs leading-5 text-muted-foreground">A project provides the code and organization context required by WIR, MIR, NCR, SOR, RRR, documents, and reports. Your first project is selected automatically.</p></div></div><Button nativeButton={false} render={<Link href="/projects?create=1" />}><Building2 data-icon="inline-start" />Create Project</Button></CardContent></Card> : null}
 
       <section className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4 2xl:grid-cols-6" aria-label="Quality metrics">
         <MetricCard label="Total quality records" value={metrics.total} detail="All five modules" tone="neutral" icon={ShieldCheck} />

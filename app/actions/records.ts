@@ -21,6 +21,7 @@ import { createNcr, deleteNcr, updateNcr } from '@/lib/services/ncrs';
 import {
   createProject,
   deleteProject,
+  setActiveProject,
   updateProject,
 } from '@/lib/services/projects';
 import {
@@ -76,6 +77,8 @@ const projectSchema = z.object({
   name: required('Project name'),
   project_code: required('Project code').max(40),
   client: required('Client'),
+  contractor: optional,
+  consultant: optional,
   location: required('Location'),
   status: z.enum(projectStatuses),
   description: optional,
@@ -146,11 +149,57 @@ export async function createProjectAction(
   const parsed = projectSchema.safeParse(values(formData));
   if (!parsed.success) return invalid(parsed.error);
   const { user, client } = await context();
-  return finish(
-    await createProject(client, { ...parsed.data, created_by: user.id }),
-    '/projects',
-    'Project',
-  );
+  const { count, error: countError } = await client
+    .from('projects')
+    .select('id', { count: 'exact', head: true });
+  if (countError)
+    return { success: false, message: 'Existing projects could not be checked.' };
+
+  const created = await createProject(client, {
+    ...parsed.data,
+    created_by: user.id,
+  });
+  if (created.error || !created.data)
+    return {
+      success: false,
+      message: created.error ?? 'Project could not be created.',
+    };
+
+  if ((count ?? 0) === 0) {
+    const selectionError = await setActiveProject(
+      client,
+      user.id,
+      created.data.id,
+    );
+    if (selectionError)
+      return {
+        success: true,
+        message: `Project created, but it could not be made active: ${selectionError}`,
+      };
+  }
+
+  revalidatePath('/projects');
+  revalidatePath('/');
+  return {
+    success: true,
+    message:
+      (count ?? 0) === 0
+        ? 'Project created and set as your active project.'
+        : 'Project saved successfully.',
+  };
+}
+
+export async function selectActiveProjectAction(
+  formData: FormData,
+): Promise<CrudActionResult> {
+  const projectId = recordId.safeParse(formData.get('project_id'));
+  if (!projectId.success) return invalid(projectId.error);
+  const { user, client } = await context();
+  const error = await setActiveProject(client, user.id, projectId.data);
+  if (error) return { success: false, message: error };
+  revalidatePath('/projects');
+  revalidatePath('/');
+  return { success: true, message: 'Active project changed.' };
 }
 export async function updateProjectAction(
   formData: FormData,

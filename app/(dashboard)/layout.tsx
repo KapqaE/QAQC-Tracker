@@ -27,6 +27,9 @@ export default async function DashboardLayout({ children }: { children: ReactNod
     return <SetupRequired databaseReady />;
   }
   const [profile, projectsResult, notificationsResult] = loaded;
-  const activeProject = projectsResult.data.find((project) => project.status === 'Active') ?? projectsResult.data[0] ?? null;
-  return <AppShell currentUser={profile} activeProject={activeProject} unreadNotifications={notificationsResult.data}>{children}</AppShell>;
+  const activeProject = projectsResult.data.find((project) => project.id === profile.active_project_id)
+    ?? projectsResult.data.find((project) => project.status === 'Active')
+    ?? projectsResult.data[0]
+    ?? null;
+  return <AppShell currentUser={profile} projects={projectsResult.data} activeProject={activeProject} projectLoadError={projectsResult.error} unreadNotifications={notificationsResult.data}>{children}</AppShell>;
 }

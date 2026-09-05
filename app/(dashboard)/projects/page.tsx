@@ -9,25 +9,29 @@ export const dynamic = 'force-dynamic';
 const columns: CrudColumn[] = [
   { key: 'project_code', label: 'Project code', style: 'mono' },
   { key: 'name', label: 'Project', style: 'primary' },
-  { key: 'client', label: 'Client', style: 'muted' },
+  { key: 'client', label: 'Client / employer', style: 'muted' },
+  { key: 'consultant', label: 'Engineer / consultant', style: 'muted' },
   { key: 'location', label: 'Location', style: 'muted' },
   { key: 'status', label: 'Status', style: 'status' },
 ];
 
 const fields: CrudField[] = [
-  { name: 'name', label: 'Project name', required: true, placeholder: 'IST Data Center Expansion' },
-  { name: 'project_code', label: 'Project code', required: true, placeholder: 'IST-DCX-01' },
-  { name: 'client', label: 'Client', required: true, placeholder: 'Example Client' },
-  { name: 'location', label: 'Location', required: true, placeholder: 'Istanbul, Türkiye' },
-  { name: 'status', label: 'Status', type: 'select', required: true, defaultValue: 'Planning', options: projectStatuses.map((value) => ({ label: value, value })) },
+  { name: 'name', label: 'Project name', required: true, placeholder: 'IL05.1 Istanbul Data Center' },
+  { name: 'project_code', label: 'Project code', required: true, placeholder: 'IL051' },
+  { name: 'client', label: 'Client / employer', required: true, placeholder: 'EQUINIX' },
+  { name: 'contractor', label: 'Contractor', placeholder: 'SERBAN CONSTRUCTION CO.' },
+  { name: 'consultant', label: 'Engineer / consultant', placeholder: 'ARUP' },
+  { name: 'location', label: 'Location', required: true, placeholder: 'Istanbul' },
+  { name: 'status', label: 'Status', type: 'select', required: true, defaultValue: 'Active', options: projectStatuses.map((value) => ({ label: value, value })) },
   { name: 'start_date', label: 'Start date', type: 'date' },
   { name: 'target_completion_date', label: 'Target completion date', type: 'date' },
   { name: 'description', label: 'Description', type: 'textarea', span: 2, placeholder: 'Project scope and quality objectives' },
 ];
 
-export default async function ProjectsPage() {
+export default async function ProjectsPage({ searchParams }: { searchParams: Promise<{ create?: string | string[] }> }) {
+  const query = await searchParams;
   const client = await createClient();
   const result = await listProjects(client);
   const rows: CrudRow[] = result.data.map((item) => ({ ...item }));
-  return <CrudManager title="Projects" description="Manage construction projects, client context, delivery dates, and lifecycle status." noun="project" rows={rows} columns={columns} fields={fields} createAction={createProjectAction} updateAction={updateProjectAction} deleteAction={deleteProjectAction} loadError={result.error} />;
+  return <CrudManager title="Projects" description="Create and manage project context used by every QA/QC record module." noun="project" rows={rows} columns={columns} fields={fields} createAction={createProjectAction} updateAction={updateProjectAction} deleteAction={deleteProjectAction} loadError={result.error} initialCreate={query.create === '1'} />;
 }

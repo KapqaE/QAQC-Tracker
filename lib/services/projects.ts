@@ -9,8 +9,34 @@ export async function listProjects(client: SupabaseClient<Database>): Promise<Se
 }
 
 export async function createProject(client: SupabaseClient<Database>, values: TablesInsert<'projects'>) {
-  const { error } = await client.from('projects').insert(values);
-  return error ? serviceError(error, 'Project could not be created.') : null;
+  const { data, error } = await client.from('projects').insert(values).select('*').single();
+  return {
+    data,
+    error: error ? serviceError(error, 'Project could not be created.') : null,
+  };
+}
+
+export async function setActiveProject(
+  client: SupabaseClient<Database>,
+  userId: string,
+  projectId: string,
+) {
+  const { data: project, error: projectError } = await client
+    .from('projects')
+    .select('id')
+    .eq('id', projectId)
+    .maybeSingle();
+
+  if (projectError || !project)
+    return projectError
+      ? serviceError(projectError, 'The selected project could not be verified.')
+      : 'The selected project is not available to your account.';
+
+  const { error } = await client
+    .from('profiles')
+    .update({ active_project_id: projectId })
+    .eq('id', userId);
+  return error ? serviceError(error, 'The active project could not be changed.') : null;
 }
 
 export async function updateProject(client: SupabaseClient<Database>, id: string, values: TablesUpdate<'projects'>) {
