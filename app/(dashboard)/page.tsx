@@ -7,24 +7,23 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { getQualityDashboard } from '@/lib/services/quality-dashboard';
-import { listProjects } from '@/lib/services/projects';
+import { getProjectContext } from '@/lib/project-context';
 import { createClient } from '@/lib/supabase/server';
 
 export const dynamic = 'force-dynamic';
 
 export default async function DashboardPage() {
   const client = await createClient();
-  const [data, projectsResult] = await Promise.all([
-    getQualityDashboard(client),
-    listProjects(client),
-  ]);
+  const context = await getProjectContext();
+  const data = await getQualityDashboard(client, context.activeProject?.id);
+  const projectsResult = { data: context.projects, error: context.error };
   const { metrics } = data;
   const hasProjects = projectsResult.data.length > 0;
 
   return (
     <div className="mx-auto flex w-full max-w-[1600px] flex-col gap-6">
       <section className="flex flex-col justify-between gap-4 xl:flex-row xl:items-end">
-        <div><div className="mb-2 text-xs font-semibold uppercase tracking-[0.12em] text-primary">QA/QC Records V2</div><h1 className="text-2xl font-semibold tracking-tight sm:text-[30px]">Quality control overview</h1><p className="mt-1.5 max-w-2xl text-sm leading-6 text-muted-foreground">Live Supabase records across WIR, MIR, NCR, SOR and room readiness. No dashboard values are mocked.</p></div>
+        <div><div className="mb-2 text-xs font-semibold uppercase tracking-[0.12em] text-primary">QA/QC Records V2</div><h1 className="text-2xl font-semibold tracking-tight sm:text-[30px]">Quality control overview</h1><p className="mt-1.5 max-w-2xl text-sm leading-6 text-muted-foreground">Active-project records across WIR, MIR, NCR, SOR and room readiness. No dashboard values are mocked.</p></div>
         <Button nativeButton={false} size="lg" render={<Link href={hasProjects ? '/wir' : '/projects?create=1'} />}>{hasProjects ? <ClipboardCheck data-icon="inline-start" /> : <Building2 data-icon="inline-start" />}{hasProjects ? 'Create WIR' : 'Create Project'}</Button>
       </section>
 

@@ -33,5 +33,5 @@ export default async function ProjectsPage({ searchParams }: { searchParams: Pro
   const client = await createClient();
   const result = await listProjects(client);
   const rows: CrudRow[] = result.data.map((item) => ({ ...item }));
-  return <CrudManager title="Projects" description="Create and manage project context used by every QA/QC record module." noun="project" rows={rows} columns={columns} fields={fields} createAction={createProjectAction} updateAction={updateProjectAction} deleteAction={deleteProjectAction} loadError={result.error} initialCreate={query.create === '1'} />;
+  return <CrudManager key={query.create === '1' ? 'create' : 'list'} title="Projects" description="Create and manage project context used by every QA/QC record module." noun="project" rows={rows} columns={columns} fields={fields} createAction={createProjectAction} updateAction={updateProjectAction} deleteAction={deleteProjectAction} loadError={result.error} initialCreate={query.create === '1'} />;
 }

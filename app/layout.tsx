@@ -14,11 +14,11 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   metadataBase: new URL(
-    process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000',
+    process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000',
   ),
   title: 'QAQC Tracker | Project Quality Control',
   description:
-    'Inspection, NCR, punch list, and document control for construction quality teams.',
+    'WIR, MIR, NCR, SOR, room readiness and document control for construction quality teams.',
   openGraph: {
     title: 'QAQC Tracker',
     description: 'Quality control, from field inspection to closeout.',

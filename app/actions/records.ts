@@ -3,7 +3,7 @@
 import { revalidatePath } from 'next/cache';
 import { z } from 'zod';
 
-import { requireUser } from '@/lib/auth';
+import { ensureProfile, requireUser } from '@/lib/auth';
 import {
   createDocument,
   deleteDocument,
@@ -149,6 +149,7 @@ export async function createProjectAction(
   const parsed = projectSchema.safeParse(values(formData));
   if (!parsed.success) return invalid(parsed.error);
   const { user, client } = await context();
+  await ensureProfile(user);
   const { count, error: countError } = await client
     .from('projects')
     .select('id', { count: 'exact', head: true });
@@ -171,14 +172,17 @@ export async function createProjectAction(
       user.id,
       created.data.id,
     );
-    if (selectionError)
+    if (selectionError) {
+      revalidatePath('/', 'layout');
       return {
         success: true,
         message: `Project created, but it could not be made active: ${selectionError}`,
       };
+    }
   }
 
   revalidatePath('/projects');
+  revalidatePath('/', 'layout');
   revalidatePath('/');
   return {
     success: true,
@@ -198,6 +202,7 @@ export async function selectActiveProjectAction(
   const error = await setActiveProject(client, user.id, projectId.data);
   if (error) return { success: false, message: error };
   revalidatePath('/projects');
+  revalidatePath('/', 'layout');
   revalidatePath('/');
   return { success: true, message: 'Active project changed.' };
 }
@@ -224,6 +229,7 @@ export async function deleteProjectAction(
   const error = await deleteProject(client, id.data);
   if (!error) {
     revalidatePath('/projects');
+  revalidatePath('/', 'layout');
     revalidatePath('/');
   }
   return { success: !error, message: error ?? 'Project deleted.' };

@@ -4,6 +4,8 @@ import { revalidatePath } from 'next/cache';
 import { z } from 'zod';
 
 import type { CrudActionResult } from '@/app/actions/records';
+import { recordProject, type RecordKind } from '@/lib/services/record-links';
+import { rrrReleaseIssues } from '@/lib/quality-records/rrr-gate';
 import { requireUser } from '@/lib/auth';
 import {
   generateQualityDocumentCode,
@@ -90,7 +92,7 @@ const rrrSchema = z.object({
   classification_code: optional, title: required('Title'), project_phase: optional, room_asset_code: optional, systems: optional,
   requested_by: optional, request_date: optionalDate, related_itp_reference: optional, employer_readiness_checklist_tracker_ref: optional,
   readiness_stage: z.enum(['Stage 1', 'Stage 2']), room_route: z.enum(['Standard Room', 'ICT Room / Space']),
-  overall_target_100_date: optionalDate, requested_inspection_date: optionalDate, requested_inspection_time: optional,
+  overall_target_100_date: optionalDate, requested_inspection_date: optionalDate, requested_inspection_time: z.string().refine((v) => !v || /^([01]\d|2[0-3]):[0-5]\d(:[0-5]\d)?$/.test(v), 'Enter a valid time.').transform((v) => v || null),
   notice_given_working_days: z.string().refine((value) => !value || /^\d+$/.test(value), 'Notice must be zero or a positive number.').transform((value) => value ? Number(value) : null),
   energization_power_request_ref: optional, inspection_purpose: optional, engineer_decision: optional, engineer_name: optional,
   engineer_date: optionalDate, cxa_decision: optional, cxa_name: optional, cxa_date: optionalDate, employer_release: optional,
@@ -158,6 +160,7 @@ export async function updateSorAction(formData: FormData): Promise<CrudActionRes
 export async function deleteSorAction(formData: FormData): Promise<CrudActionResult> { return deleteRecord(formData, 'sor_records', '/sor', 'SOR'); }
 
 export async function createNcrV2Action(formData: FormData): Promise<CrudActionResult> {
+  if (!/^NCR\.[0-9]{4}$/.test(textValue(formData, 'ncr_number'))) return { success: false, message: 'Use NCR.0001 for a new NCR.' };
   const parsed = ncrSchema.safeParse(raw(formData)); if (!parsed.success) return invalid(parsed.error); const { user, client } = await context();
   const project = await verifyProject(client, parsed.data.project_id, parsed.data.project_code); if (project.error) return { success: false, message: project.error };
   const common = commonIdentity(parsed.data, 'NCR', parsed.data.ncr_number);
@@ -182,6 +185,8 @@ export async function deleteNcrV2Action(formData: FormData): Promise<CrudActionR
 
 export async function createRrrAction(formData: FormData): Promise<CrudActionResult> {
   const parsed = rrrSchema.safeParse(raw(formData)); if (!parsed.success) return invalid(parsed.error); const { user, client } = await context();
+  const project = await client.from('projects').select('project_code').eq('id', parsed.data.project_id).maybeSingle();
+  if (project.error || !project.data || projectNamingCode(project.data.project_code) !== 'IL051') return { success: false, message: 'RRR uses the fixed IL051 template. Select the IL051 project.' };
   const affirmativeRelease = ['Room Released for Commissioning','Released for Energization — L2B Tags Signed Off'].includes(parsed.data.employer_release ?? '');
   if (affirmativeRelease || ['Released for Commissioning','Released for Energization'].includes(parsed.data.status)) return { success: false, message: 'A new RRR starts with incomplete readiness rows. Record RR-4 and close P1/P2 blockers before entering an Employer release.' };
   const payload: TablesInsert<'rrr_records'> = { ...parsed.data, document_code: RRR_DOCUMENT_CODE, template_code: RRR_TEMPLATE_CODE,
@@ -192,16 +197,27 @@ export async function createRrrAction(formData: FormData): Promise<CrudActionRes
   const result = await createV2Record(client, 'rrr_records', payload); if (result.error || !result.id) return { success: false, message: result.error ?? 'RRR could not be created.' };
   const readiness = rrrReadinessControls.map((controlLevel, index) => ({ rrr_id: result.id!, control_level: controlLevel, percent_complete: 0, open_actions_count: 0, sort_order: index + 1 }));
   const revision = { rrr_id: result.id, submission_revision: parsed.data.submission_revision, submitted_date: parsed.data.status === 'Draft' ? null : parsed.data.record_date, source_reason: 'Initial submission', revised_by: parsed.data.requested_by, status: parsed.data.status, created_by: user.id };
-  const [readinessResult, revisionResult] = await Promise.all([client.from('rrr_readiness_controls').insert(readiness), client.from('rrr_submission_revisions').insert(revision)]);
-  const childError = readinessResult.error ?? revisionResult.error; return done(childError ? serviceError(childError, 'RRR created, but its readiness or revision rows could not be initialized.') : null, ['/rrr'], 'RRR');
+  const [readinessResult, revisionResult] = await Promise.all([client.from('rrr_readiness_controls').upsert(readiness, { onConflict: 'rrr_id,control_level', ignoreDuplicates: true }), client.from('rrr_submission_revisions').upsert(revision, { onConflict: 'rrr_id,submission_revision', ignoreDuplicates: true })]);
+  const childError = readinessResult.error ?? revisionResult.error;
+  done(null, ['/rrr'], 'RRR');
+  return { success: true, message: childError ? 'RRR created. Its readiness/history could not be initialized; apply migration 008 and contact your administrator before proceeding. Do not create a duplicate.' : 'RRR saved successfully.' };
 }
 export async function updateRrrAction(formData: FormData): Promise<CrudActionResult> {
   const id = idSchema.safeParse(formData.get('id')); const parsed = rrrSchema.safeParse(raw(formData)); if (!id.success) return invalid(id.error); if (!parsed.success) return invalid(parsed.error); const { client, user } = await context();
-  const [{ data: current }, { data: rr4 }, { data: blockers }] = await Promise.all([
-    client.from('rrr_records').select('submission_revision').eq('id', id.data).maybeSingle(),
-    client.from('rrr_readiness_controls').select('percent_complete, open_actions_count').eq('rrr_id', id.data).like('control_level', 'RR-4%').maybeSingle(),
+  const [currentResult, rr4Result, blockersResult] = await Promise.all([
+    client.from('rrr_records').select('submission_revision, project_id').eq('id', id.data).maybeSingle(),
+    client.from('rrr_readiness_controls').select('control_level, percent_complete, open_actions_count').eq('rrr_id', id.data).like('control_level', 'RR-4%').maybeSingle(),
     client.from('rrr_open_items').select('id').eq('rrr_id', id.data).in('priority', ['P1','P2']).neq('status', 'Closed').limit(1),
   ]);
+  if (currentResult.error || rr4Result.error || blockersResult.error || !currentResult.data) return { success: false, message: 'RRR readiness could not be verified. Nothing was saved.' };
+  const current = currentResult.data; const rr4 = rr4Result.data; const blockers = blockersResult.data;
+  if (current.project_id !== parsed.data.project_id) return { success: false, message: 'An existing RRR cannot be moved to another project.' };
+  const gateIssues = rrrReleaseIssues({ ...parsed.data, ...declarationChecks(formData), room_complete: bool(formData, 'room_complete'), no_open_p1_p2_items: bool(formData, 'no_open_p1_p2_items'), declaration_complete: bool(formData, 'declaration_complete') }, rr4 ? [rr4] : [], blockers?.map(() => ({ priority: 'P1', status: 'Open' })) ?? []);
+  if (gateIssues.length) return { success: false, message: gateIssues.join(' ') };
+  if (parsed.data.status === 'Released for Energization') {
+    const tags = await client.from('rrr_commissioning_tags').select('cxa_signoff_date, reference').eq('rrr_id', id.data).eq('tag_type', 'L2B YELLOW TAG');
+    if (tags.error || !tags.data?.length || tags.data.some((t) => !t.cxa_signoff_date || !t.reference?.trim())) return { success: false, message: 'Energization release requires referenced, signed-off L2B tags.' };
+  }
   const affirmativeRelease = ['Room Released for Commissioning','Released for Energization — L2B Tags Signed Off'].includes(parsed.data.employer_release ?? '');
   const releaseRequested = affirmativeRelease || ['Released for Commissioning','Released for Energization'].includes(parsed.data.status);
   const declarationReady = Object.values(declarationChecks(formData)).every(Boolean);
@@ -216,8 +232,8 @@ export async function updateRrrAction(formData: FormData): Promise<CrudActionRes
   const updateError = await updateV2Record(client, 'rrr_records', id.data, payload);
   if (updateError) return done(updateError, ['/rrr', `/rrr/${id.data}`], 'RRR');
   if (current && current.submission_revision !== parsed.data.submission_revision) {
-    const { error } = await client.from('rrr_submission_revisions').insert({ rrr_id: id.data, submission_revision: parsed.data.submission_revision, submitted_date: parsed.data.record_date, source_reason: 'Record resubmission', revised_by: parsed.data.requested_by, status: parsed.data.status, created_by: user.id });
-    if (error) return { success: false, message: serviceError(error, 'RRR was updated, but the append-only revision row could not be recorded.') };
+    const { error } = await client.from('rrr_submission_revisions').upsert({ rrr_id: id.data, submission_revision: parsed.data.submission_revision, submitted_date: parsed.data.record_date, source_reason: 'Record resubmission', revised_by: parsed.data.requested_by, status: parsed.data.status, created_by: user.id }, { onConflict: 'rrr_id,submission_revision', ignoreDuplicates: true });
+    if (error) { done(null, ['/rrr', `/rrr/${id.data}`], 'RRR'); return { success: true, message: 'RRR updated, but history could not be recorded. Apply migration 008 before further revisions.' }; }
   }
   return done(null, ['/rrr', `/rrr/${id.data}`], 'RRR');
 }
@@ -239,13 +255,15 @@ export async function saveRrrReadinessAction(formData: FormData): Promise<CrudAc
   const id = idSchema.safeParse(formData.get('id')); const rrrId = idSchema.safeParse(formData.get('rrr_id')); const percent = Number(formData.get('percent_complete')); const actions = Number(formData.get('open_actions_count'));
   if (!id.success) return invalid(id.error); if (!rrrId.success) return invalid(rrrId.error); if (!Number.isInteger(percent) || percent < 0 || percent > 100) return { success: false, message: 'Percent complete must be between 0 and 100.' };
   if (!Number.isInteger(actions) || actions < 0) return { success: false, message: 'Open actions cannot be negative.' }; const { client } = await context();
-  const { error } = await client.from('rrr_readiness_controls').update({ responsible: textValue(formData, 'responsible') || null, percent_complete: percent, open_actions_count: actions, checklist_reference: textValue(formData, 'checklist_reference') || null }).eq('id', id.data);
+  const { error } = await client.from('rrr_readiness_controls').update({ responsible: textValue(formData, 'responsible') || null, percent_complete: percent, open_actions_count: actions, checklist_reference: textValue(formData, 'checklist_reference') || null }).eq('id', id.data).eq('rrr_id', rrrId.data);
   return done(error ? serviceError(error, 'Readiness control could not be updated.') : null, [`/rrr/${rrrId.data}`, '/rrr'], 'Readiness control');
 }
 
 export async function addQualityAction(formData: FormData): Promise<CrudActionResult> {
   const parsed = z.object({ project_id: idSchema, parent_record_id: idSchema, parent_record_type: z.enum(['NCR','SOR','RRR']), action_description: required('Action'), responsible_person: required('Responsible person'), due_date: date('Due date') }).safeParse(raw(formData));
-  if (!parsed.success) return invalid(parsed.error); const { user, client } = await context(); const { error } = await client.from('quality_record_actions').insert({ ...parsed.data, status: 'Open', created_by: user.id });
+  if (!parsed.success) return invalid(parsed.error); const { user, client } = await context();
+  if (await recordProject(client, parsed.data.parent_record_type, parsed.data.parent_record_id) !== parsed.data.project_id) return { success: false, message: 'The action must belong to its parent record project.' };
+  const { error } = await client.from('quality_record_actions').insert({ ...parsed.data, status: 'Open', created_by: user.id });
   const route = `/${parsed.data.parent_record_type.toLowerCase()}/${parsed.data.parent_record_id}`; return done(error ? serviceError(error, 'Action could not be added.') : null, [route], 'Action');
 }
 
@@ -263,13 +281,13 @@ export async function updateQualityAction(formData: FormData): Promise<CrudActio
 }
 
 export async function addRrrOpenItem(formData: FormData): Promise<CrudActionResult> {
-  const parsed = z.object({ rrr_id: idSchema, item_number: required('Item number'), reference: optional, reference_type: optional, description: required('Description'), priority: z.enum(['P1','P2','P3','P4']), raised_by: optional, target_date: optionalDate, status: z.enum(['Open','Closed','Disputed']), linked_record_type: optional, linked_record_id: z.string().trim().refine((value) => !value || z.uuid().safeParse(value).success, 'Linked record ID must be a UUID.').transform((value) => value || null) }).safeParse(raw(formData));
-  if (!parsed.success) return invalid(parsed.error); const { client } = await context(); const { error } = await client.from('rrr_open_items').insert(parsed.data); return done(error ? serviceError(error, 'Open item could not be added.') : null, [`/rrr/${parsed.data.rrr_id}`], 'Open item');
+  const parsed = z.object({ rrr_id: idSchema, item_number: required('Item number'), reference: optional, reference_type: optional, description: required('Description'), priority: z.enum(['P1','P2','P3','P4']), raised_by: optional, target_date: optionalDate, status: z.enum(['Open','Closed','Disputed']), linked_record_type: z.union([z.enum(['WIR','MIR','NCR','SOR','RRR']), z.literal('')]).transform((v) => v || null), linked_record_id: z.string().trim().refine((value) => !value || z.uuid().safeParse(value).success, 'Linked record ID must be a UUID.').transform((value) => value || null) }).safeParse(raw(formData));
+  if (!parsed.success) return invalid(parsed.error); const { client } = await context(); const { error } = await saveChild(client, 'rrr_open_items', formData, parsed.data); return done(error ? serviceError(error, 'Open item could not be added.') : null, [`/rrr/${parsed.data.rrr_id}`], 'Open item');
 }
 
 export async function addRrrEvidence(formData: FormData): Promise<CrudActionResult> {
-  const parsed = z.object({ rrr_id: idSchema, evidence_type: required('Evidence type'), reference: required('Reference'), evidence_date: optionalDate, linked_record_type: optional, linked_record_id: z.string().trim().transform((value) => value || null) }).safeParse(raw(formData));
-  if (!parsed.success) return invalid(parsed.error); const { client } = await context(); const { error } = await client.from('rrr_evidence').insert({ ...parsed.data, uploaded: bool(formData, 'uploaded'), approved: bool(formData, 'approved') }); return done(error ? serviceError(error, 'Evidence could not be added.') : null, [`/rrr/${parsed.data.rrr_id}`], 'Evidence');
+  const parsed = z.object({ rrr_id: idSchema, evidence_type: required('Evidence type'), reference: required('Reference'), evidence_date: optionalDate, linked_record_type: z.union([z.enum(['WIR','MIR','NCR','SOR','RRR']), z.literal('')]).transform((v) => v || null), linked_record_id: z.string().trim().refine((value) => !value || z.uuid().safeParse(value).success, 'Linked record ID must be a UUID.').transform((value) => value || null) }).safeParse(raw(formData));
+  if (!parsed.success) return invalid(parsed.error); const { client } = await context(); const { error } = await saveChild(client, 'rrr_evidence', formData, { ...parsed.data, uploaded: bool(formData, 'uploaded'), approved: bool(formData, 'approved') }); return done(error ? serviceError(error, 'Evidence could not be added.') : null, [`/rrr/${parsed.data.rrr_id}`], 'Evidence');
 }
 
 export async function addRrrRevision(formData: FormData): Promise<CrudActionResult> {
@@ -279,20 +297,34 @@ export async function addRrrRevision(formData: FormData): Promise<CrudActionResu
 
 export async function addRrrTag(formData: FormData): Promise<CrudActionResult> {
   const parsed = z.object({ rrr_id: idSchema, tag_type: z.enum(['L2A RED TAG','L2B YELLOW TAG','CONDITIONAL YELLOW TAG / CYT']), asset_equipment: optional, facility_grid_status: optional, cxa_signoff_date: optionalDate, reference: optional, status: optional }).safeParse(raw(formData));
-  if (!parsed.success) return invalid(parsed.error); const { client } = await context(); const { error } = await client.from('rrr_commissioning_tags').insert(parsed.data); return done(error ? serviceError(error, 'Commissioning tag could not be added.') : null, [`/rrr/${parsed.data.rrr_id}`], 'Commissioning tag');
+  if (!parsed.success) return invalid(parsed.error); const { client } = await context(); const { error } = await saveChild(client, 'rrr_commissioning_tags', formData, parsed.data); return done(error ? serviceError(error, 'Commissioning tag could not be added.') : null, [`/rrr/${parsed.data.rrr_id}`], 'Commissioning tag');
 }
 
 export async function addRrrAttendance(formData: FormData): Promise<CrudActionResult> {
   const parsed = z.object({ rrr_id: idSchema, attendance_group: z.enum(['External','SERBAN']), attendee_role: required('Attendee role'), attendee_name: optional }).safeParse(raw(formData));
-  if (!parsed.success) return invalid(parsed.error); const { client } = await context(); const { error } = await client.from('rrr_attendance').insert({ ...parsed.data, required: bool(formData, 'required'), attended: bool(formData, 'attended') }); return done(error ? serviceError(error, 'Attendance row could not be added.') : null, [`/rrr/${parsed.data.rrr_id}`], 'Attendance row');
+  if (!parsed.success) return invalid(parsed.error); const { client } = await context(); const { error } = await saveChild(client, 'rrr_attendance', formData, { ...parsed.data, required: bool(formData, 'required'), attended: bool(formData, 'attended') }); return done(error ? serviceError(error, 'Attendance row could not be added.') : null, [`/rrr/${parsed.data.rrr_id}`], 'Attendance row');
 }
 
 export async function addRrrSignatory(formData: FormData): Promise<CrudActionResult> {
   const parsed = z.object({ rrr_id: idSchema, role: required('Signatory role'), name: optional, signed_date: optionalDate, signature_status: optional, signature_reference: optional }).safeParse(raw(formData));
-  if (!parsed.success) return invalid(parsed.error); const { client } = await context(); const { error } = await client.from('rrr_signatories').insert(parsed.data); return done(error ? serviceError(error, 'Signatory could not be added.') : null, [`/rrr/${parsed.data.rrr_id}`], 'Signatory');
+  if (!parsed.success) return invalid(parsed.error); const { client } = await context(); const { error } = await saveChild(client, 'rrr_signatories', formData, parsed.data); return done(error ? serviceError(error, 'Signatory could not be added.') : null, [`/rrr/${parsed.data.rrr_id}`], 'Signatory');
 }
 
 export async function addRrrAttachment(formData: FormData): Promise<CrudActionResult> {
   const parsed = z.object({ rrr_id: idSchema, attachment_type: required('Attachment type'), document_evidence_reference: required('Document / evidence reference'), revision: optional, attachment_date: optionalDate, originator: optional, linked_submission_revision: optional, status: optional }).safeParse(raw(formData));
-  if (!parsed.success) return invalid(parsed.error); const { client } = await context(); const { error } = await client.from('rrr_linked_attachments').insert(parsed.data); return done(error ? serviceError(error, 'Attachment metadata could not be added.') : null, [`/rrr/${parsed.data.rrr_id}`], 'Attachment metadata');
+  if (!parsed.success) return invalid(parsed.error); const { client } = await context(); const { error } = await saveChild(client, 'rrr_linked_attachments', formData, parsed.data); return done(error ? serviceError(error, 'Attachment metadata could not be added.') : null, [`/rrr/${parsed.data.rrr_id}`], 'Attachment metadata');
+}
+
+type ChildTable = 'rrr_open_items' | 'rrr_evidence' | 'rrr_commissioning_tags' | 'rrr_attendance' | 'rrr_signatories' | 'rrr_linked_attachments';
+async function saveChild<T extends ChildTable>(client: Awaited<ReturnType<typeof createClient>>, table: T, formData: FormData, payload: TablesInsert<T> & { rrr_id: string }) {
+  const parentProject = await recordProject(client, 'RRR', payload.rrr_id);
+  const link = payload as { linked_record_id?: string | null; linked_record_type?: RecordKind | null };
+  if (!parentProject || (link.linked_record_id && (!link.linked_record_type || await recordProject(client, link.linked_record_type, link.linked_record_id) !== parentProject))) return { error: { code: '23514', message: 'Invalid record relationship.', details: '', hint: '' } };
+  const suppliedId = formData.get('id');
+  const id = suppliedId ? idSchema.safeParse(suppliedId) : null;
+  if (id && !id.success) return { error: { code: '23514', message: 'Invalid child record ID.', details: '', hint: '' } };
+  // A single table-typed boundary; values are validated by each public action.
+  // oxlint-disable-next-line typescript/no-explicit-any
+  const query = (client as any).from(table);
+  return id?.success ? await query.update(payload).eq('id', id.data).eq('rrr_id', payload.rrr_id).select('id').single() : await query.insert(payload);
 }

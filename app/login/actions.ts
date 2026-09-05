@@ -1,5 +1,6 @@
 'use server';
 
+import { safeReturnPath } from '@/lib/auth-redirect';
 import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { z } from 'zod';
@@ -17,10 +18,6 @@ const signupSchema = credentialsSchema.extend({
   full_name: z.string().trim().min(2, 'Full name is required.').max(100),
 });
 
-function safeNext(value: FormDataEntryValue | null) {
-  const next = typeof value === 'string' ? value : '/';
-  return next.startsWith('/') && !next.startsWith('//') ? next : '/';
-}
 
 function authMessage(message: string) {
   if (message.toLowerCase().includes('invalid login credentials')) return 'Email or password is incorrect.';
@@ -42,7 +39,7 @@ export async function loginAction(formData: FormData): Promise<AuthActionResult>
   const { error } = await supabase.auth.signInWithPassword(parsed.data);
   if (error) return { success: false, message: authMessage(error.message) };
 
-  redirect(safeNext(formData.get('next')));
+  redirect(safeReturnPath(formData.get('next')));
 }
 
 export async function signupAction(formData: FormData): Promise<AuthActionResult> {
@@ -67,7 +64,7 @@ export async function signupAction(formData: FormData): Promise<AuthActionResult
   });
 
   if (error) return { success: false, message: authMessage(error.message) };
-  if (data.session) redirect(safeNext(formData.get('next')));
+  if (data.session) redirect(safeReturnPath(formData.get('next')));
 
   return { success: true, message: 'Account created. Check your email to confirm your address, then sign in.' };
 }

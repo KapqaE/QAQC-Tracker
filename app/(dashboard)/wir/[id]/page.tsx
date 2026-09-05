@@ -1,14 +1,15 @@
+import { RecordLinks } from '@/components/quality-records/record-links';
 import { notFound } from 'next/navigation';
 
 import { QualityRecordDetail } from '@/components/quality-records/quality-record-detail';
 import { createClient } from '@/lib/supabase/server';
 
 export const dynamic = 'force-dynamic';
-export default async function WirDetailPage({ params }: { params: Promise<{ id: string }> }) { const { id } = await params; const client = await createClient(); const { data: r } = await client.from('inspections').select('*').eq('id', id).maybeSingle(); if (!r) notFound();
+export default async function WirDetailPage({ params }: { params: Promise<{ id: string }> }) { const { id } = await params; const client = await createClient(); const { data: r, error } = await client.from('inspections').select('*').eq('id', id).maybeSingle(); if (error) throw new Error('The WIR record could not be loaded.'); if (!r) notFound();
   return <QualityRecordDetail module="WIR" route="/wir" recordNumber={r.wir_number || r.inspection_number} documentCode={r.full_document_code} title={r.inspection_item || r.description} status={r.status} revision={r.revision} recordDate={r.planned_inspection_date} discipline={r.discipline} location={r.location_grid || r.area} sections={[
     { title: 'Record identity', fields: [{ label: 'WIR number', value: r.wir_number || r.inspection_number }, { label: 'Full document code', value: r.full_document_code }, { label: 'Revision', value: r.revision }, { label: 'File title', value: r.file_title }, { label: 'Level / plan area', value: `${r.level_code ?? ''}${r.plan_area_code ?? ''}` }, { label: 'Volume', value: r.volume_code }, { label: 'Classification', value: r.classification_code }, { label: 'Originator', value: r.originator_code }] },
     { title: 'Inspection request details', fields: [{ label: 'To / Consultant', value: r.consultant }, { label: 'From / Contractor', value: r.contractor }, { label: 'Inspection item', value: r.inspection_item || r.description, wide: true }, { label: 'Location / grid', value: r.location_grid }, { label: 'Requested date', value: r.planned_inspection_date }, { label: 'Time window', value: r.inspection_time_window }, { label: 'Inspection type', value: r.inspection_type }, { label: 'Estimated volume', value: r.estimated_volume }, { label: 'Pile / location numbers', value: r.pile_location_numbers }] },
     { title: 'References', fields: [{ label: 'Method statement', value: r.method_statement }, { label: 'ITP reference', value: r.itp_reference }, { label: 'ITP revision', value: r.itp_revision }, { label: 'ITP item', value: r.itp_item }, { label: 'ITP control point', value: r.itp_control_point }, { label: 'Drawing reference', value: r.drawing_reference }] },
     { title: 'Inspection result', fields: [{ label: 'Actual inspection date', value: r.actual_inspection_date }, { label: 'Inspector', value: r.inspector }, { label: 'Reviewer', value: r.reviewer_name }, { label: 'Engineer result', value: r.engineer_inspection_result }, { label: 'Result', value: r.result }, { label: 'Comments', value: r.comments, wide: true }] },
     { title: 'Import privacy and metadata', fields: [{ label: 'Source filename metadata only', value: r.source_filename, wide: true }, { label: 'PDF storage', value: 'No PDF, blob, base64, or source file contents are stored by the WIR import.' , wide: true }] },
-  ]} />; }
+  ]}><RecordLinks type="WIR" id={id} /></QualityRecordDetail>; }

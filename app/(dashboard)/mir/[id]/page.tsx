@@ -1,3 +1,4 @@
+import { RecordLinks } from '@/components/quality-records/record-links';
 import { notFound } from 'next/navigation';
 
 import { QualityRecordDetail } from '@/components/quality-records/quality-record-detail';
@@ -5,7 +6,7 @@ import { getV2Record } from '@/lib/services/quality-records';
 import { createClient } from '@/lib/supabase/server';
 
 export const dynamic = 'force-dynamic';
-export default async function MirDetailPage({ params }: { params: Promise<{ id: string }> }) { const { id } = await params; const client = await createClient(); const result = await getV2Record(client, 'mir_records', id); if (!result.data) notFound(); const r = result.data;
+export default async function MirDetailPage({ params }: { params: Promise<{ id: string }> }) { const { id } = await params; const client = await createClient(); const result = await getV2Record(client, 'mir_records', id); if (result.error) throw new Error(result.error); if (!result.data) notFound(); const r = result.data;
   return <QualityRecordDetail module="MIR" route="/mir" recordNumber={r.mir_number} documentCode={r.document_code} title={r.material_title} status={r.status} revision={r.revision} recordDate={r.record_date} discipline={r.discipline} location={r.installation_location} sections={[
     { title: 'Record identity and metadata', fields: [{ label: 'MIR number', value: r.mir_number }, { label: 'File type', value: r.file_type_code }, { label: 'Level / plan area', value: `${r.level_code ?? ''}${r.plan_area_code ?? ''}` }, { label: 'Volume', value: r.volume_code }, { label: 'Classification', value: r.classification_code }, { label: 'Originator', value: r.originator_code }, { label: 'Description', value: r.description, wide: true }] },
     { title: 'Material information', fields: [{ label: 'Supplier', value: r.supplier }, { label: 'Manufacturer', value: r.manufacturer }, { label: 'Supply reference', value: r.supply_reference }, { label: 'Delivery note', value: r.delivery_note_reference }, { label: 'Package / system', value: r.package_system }, { label: 'Work package', value: r.contractor_work_package }, { label: 'Approved quantity', value: r.approved_quantity }, { label: 'Quantity presented', value: r.quantity_presented }] },
@@ -14,4 +15,4 @@ export default async function MirDetailPage({ params }: { params: Promise<{ id: 
     { title: 'Inspection', fields: [{ label: 'Inspection findings', value: r.inspection_findings, wide: true }, { label: 'Required action / restriction', value: r.required_action_restriction, wide: true }] },
     { title: 'Review and material release', fields: [{ label: 'Reviewer', value: r.reviewer }, { label: 'Decision', value: r.review_decision }, { label: 'Final disposition', value: r.final_material_disposition }, { label: 'Closure date', value: r.closure_date }, { label: 'Review comments', value: r.review_comments, wide: true }, { label: 'Release basis', value: r.release_basis, wide: true }] },
     { title: 'Procore metadata', fields: [{ label: 'Procore reference', value: r.procore_reference }, { label: 'Workflow status', value: r.workflow_status }, { label: 'Current workflow step', value: r.current_workflow_step }, { label: 'Current assignees', value: r.current_step_assignees }, { label: 'Filename metadata only', value: r.source_filename, wide: true }] },
-  ]} />; }
+  ]}><RecordLinks type="MIR" id={id} /></QualityRecordDetail>; }
