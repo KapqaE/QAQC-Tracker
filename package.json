@@ -12,6 +12,8 @@
     "lint": "oxlint app components lib types scripts proxy.ts next.config.ts vite.config.ts",
     "verify:procore": "tsx scripts/verify-procore-import.ts",
     "verify:wir": "tsx scripts/verify-wir-integration.ts",
+    "verify:database": "tsx scripts/verify-database.ts",
+    "verify:revision": "tsx scripts/verify-revision.ts",
     "verify:v2": "tsx scripts/verify-quality-records-v2.ts",
     "format": "oxfmt"
   },
@@ -45,6 +47,7 @@
   "devDependencies": {
     "@cloudflare/vite-plugin": "1.37.1",
     "@cloudflare/workers-types": "4.20260515.1",
+    "@electric-sql/pglite": "^0.5.8",
     "@openai/sites-vite-plugin": "0.2.0",
     "@tailwindcss/postcss": "4.2.1",
     "@types/node": "22.19.19",

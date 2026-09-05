@@ -1,3 +1,4 @@
+import { readAll } from '@/lib/services/read-all';
 import type { SupabaseClient } from '@supabase/supabase-js';
 import { serviceError, type ServiceResult } from '@/lib/services/shared';
 import type {
@@ -9,6 +10,7 @@ import type {
 
 export async function listInspections(
   client: SupabaseClient<Database>,
+  projectId?: string,
 ): Promise<ServiceResult<Tables<'inspections'>[]>> {
   const { error: migrationError } = await client
     .from('inspections')
@@ -22,10 +24,9 @@ export async function listInspections(
       error:
         'The WIR PDF metadata migration is required. Run database/004_wir_integration.sql and database/005_wir_pdf_metadata.sql in Supabase.',
     };
-  const { data, error } = await client
-    .from('inspections')
-    .select('*')
-    .order('planned_inspection_date', { ascending: false });
+  let query = client.from('inspections').select('*').order('planned_inspection_date', { ascending: false }).order('id');
+  if (projectId) query = query.eq('project_id', projectId);
+  const { data, error } = await readAll(query);
   return {
     data: data ?? [],
     error: error

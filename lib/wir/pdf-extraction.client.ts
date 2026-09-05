@@ -93,7 +93,7 @@ export async function extractWirPdfInBrowser(
       const targetPages = Array.from(
         { length: pagesToRead },
         (_, index) => index + 1,
-      ).filter((pageNumber) => pageNumber !== 1);
+      );
       if (!targetPages.length) targetPages.push(1);
       ocrWorker = await createWorker('eng', 1, {
         cacheMethod: 'none',

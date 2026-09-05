@@ -1,15 +1,22 @@
+import { readAll } from '@/lib/services/read-all';
+import { rememberProject } from '@/lib/project-preference';
 import type { SupabaseClient } from '@supabase/supabase-js';
 
 import { serviceError, type ServiceResult } from '@/lib/services/shared';
 import type { Database, Tables, TablesInsert, TablesUpdate } from '@/types/database';
 
 export async function listProjects(client: SupabaseClient<Database>): Promise<ServiceResult<Tables<'projects'>[]>> {
-  const { data, error } = await client.from('projects').select('*').order('updated_at', { ascending: false });
+  const { data, error } = await readAll(client.from('projects').select('*').order('updated_at', { ascending: false }).order('id'));
   return { data: data ?? [], error: error ? serviceError(error, 'Projects could not be loaded.') : null };
 }
 
 export async function createProject(client: SupabaseClient<Database>, values: TablesInsert<'projects'>) {
-  const { data, error } = await client.from('projects').insert(values).select('*').single();
+  let { data, error } = await client.from('projects').insert(values).select('*').single();
+  if (error?.code === 'PGRST204' || error?.code === '42703') {
+    if (values.contractor || values.consultant) return { data: null, error: 'Run database/007_project_context.sql to save contractor and consultant details.' };
+    const { contractor: _contractor, consultant: _consultant, ...legacy } = values;
+    ({ data, error } = await client.from('projects').insert(legacy).select('*').single());
+  }
   return {
     data,
     error: error ? serviceError(error, 'Project could not be created.') : null,
@@ -36,7 +43,9 @@ export async function setActiveProject(
     .from('profiles')
     .update({ active_project_id: projectId })
     .eq('id', userId);
-  return error ? serviceError(error, 'The active project could not be changed.') : null;
+  if (error && !['PGRST204', '42703'].includes(error.code)) return serviceError(error, 'The active project could not be changed.');
+  await rememberProject(userId, projectId);
+  return null;
 }
 
 export async function updateProject(client: SupabaseClient<Database>, id: string, values: TablesUpdate<'projects'>) {

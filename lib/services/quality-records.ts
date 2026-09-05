@@ -1,3 +1,4 @@
+import { readAll } from '@/lib/services/read-all';
 import type { SupabaseClient } from '@supabase/supabase-js';
 
 import { serviceError, type ServiceResult } from '@/lib/services/shared';
@@ -21,11 +22,11 @@ function genericTableClient(client: SupabaseClient<Database>) {
 export async function listV2Records<T extends V2Table>(
   client: SupabaseClient<Database>,
   table: T,
+  projectId?: string,
 ): Promise<ServiceResult<Tables<T>[]>> {
-  const { data, error } = await genericTableClient(client)
-    .from(table)
-    .select('*')
-    .order('record_date', { ascending: false });
+  let query = genericTableClient(client).from(table).select('*').order('record_date', { ascending: false }).order('id');
+  if (projectId) query = query.eq('project_id', projectId);
+  const { data, error } = await readAll(query);
   return {
     data: (data ?? []) as unknown as Tables<T>[],
     error: error
@@ -85,10 +86,10 @@ export async function listQualityActions(
   parentType?: string,
   parentId?: string,
 ) {
-  let query = client.from('quality_record_actions').select('*').order('due_date');
+  let query = client.from('quality_record_actions').select('*').order('due_date').order('id');
   if (parentType) query = query.eq('parent_record_type', parentType);
   if (parentId) query = query.eq('parent_record_id', parentId);
-  const { data, error } = await query;
+  const { data, error } = await readAll(query);
   return {
     data: data ?? [],
     error: error ? serviceError(error, 'Record actions could not be loaded.') : null,

@@ -1,237 +1,141 @@
 # QAQC Tracker
 
-QAQC Tracker is a production-style MVP for construction and data-center quality teams. It provides one authenticated workspace for projects, inspections, non-conformance reports, punch items, controlled document metadata, deadlines, and closeout reporting.
+An authenticated construction-quality workspace for projects, WIR, MIR, NCR, SOR, RRR (Room Readiness Requests), controlled document metadata, dashboards and reports. Legacy punch-list records remain available. This is a collaborative MVP, not a certified approval or handover system.
 
-## Features
+## Stack and structure
 
-- Email/password authentication and signup with Supabase Auth
-- Server-side route protection with refreshed cookie sessions
-- Automatic profile provisioning from `auth.users`
-- Supabase PostgreSQL schema with UUID keys, relationships, indexes, and timestamps
-- Row-level security on every application table
-- Project, WIR/inspection, NCR, punch-list, and document-metadata CRUD
-- Required-field validation, duplicate-submit protection, delete confirmation, and feedback states
-- Search and status/project/discipline filtering where relevant
-- Live dashboard metrics, NCR status chart, inspection summary, recent activity, and deadlines
-- Dynamic overdue NCR and punch-item calculation
-- CSV-derived Procore code master data and document naming engine
-- Safe Procore CSV preview/import with required-column validation and duplicate skipping
-- Live generated document codes, type-specific number validation, and WIR next-number assistance
-- Structured WIR fields, project-scoped next-number assistance, live full-code generation, and automatic matching-document linkage
-- Responsive enterprise dashboard UI with loading, error, setup, and empty states
+React 19, TypeScript 5 (strict), Tailwind 4, shadcn/ui, Zod, Supabase Auth/PostgreSQL/RLS, and Vinext 1 beta on Vite 8 with a Cloudflare-compatible local runtime. Server Components read through services; authenticated Server Actions validate changes. The existing Sites integration remains, with safe `.openai/hosting.json`: `{"d1":null,"r2":null}`.
 
-## Screenshots
+- `app/`: protected routes, authentication and server actions.
+- `components/`: shared forms, registers, details, layout and status UI.
+- `lib/`: services, project context, naming, WIR browser extraction and readiness rules.
+- `database/`: ordered SQL migrations; never run demo seed on production.
+- `data/procore/`: runtime code tables and derived naming rules; keep these JSON files.
+- `scripts/`: offline verification and optional reference regeneration.
+- `docs/revision-audit.md`: findings, changes, test evidence and outstanding acceptance checks.
 
-Add product screenshots to `docs/` after connecting a Supabase project and loading the demo dataset.
+## Install and configure
 
-## Architecture
+Use Node.js 22.13+ and pnpm (validated with Node 24 and pnpm 11). From the project folder:
 
-The application uses Next.js App Router conventions through the existing Vinext/Vite Sites runtime. Server Components load protected data through reusable services; Server Actions validate and mutate records; `@supabase/ssr` shares the Supabase Auth session between browser, proxy, Server Components, and actions.
-
-```text
-app/
-  (dashboard)/       protected pages and shared application layout
-  actions/           authenticated Server Actions
-  auth/confirm/      email confirmation callback
-  login/             sign-in and signup experience
-components/
-  crud/              reusable CRUD table, filters, forms, and dialogs
-  dashboard/         live dashboard summaries
-  documents/         Procore register, naming form, and CSV import UI
-  inspections/       project WIR register, structured form, and code preview
-  layout/            sidebar, navbar, and account controls
-lib/
-  procore/           naming, CSV parsing, source-derived master data, and validation
-  services/          Supabase data-access layer
-  supabase/          browser, server, proxy, and environment helpers
-database/
-  001_initial_schema.sql
-  002_seed.sql
-  003_procore_document_register.sql
-  004_wir_integration.sql
-data/procore/         generated code/label reference JSON
-scripts/              repeatable Procore reference generation and CSV verification
-types/               database-safe and product TypeScript types
+```sh
+pnpm install
 ```
 
-## Technology stack
+Copy `.env.example` to `.env.local` and replace placeholders:
 
-- React 19 with Next.js App Router APIs
-- TypeScript 5 in strict mode
-- Tailwind CSS 4 and shadcn/ui primitives
-- Supabase Auth, PostgreSQL, Data API, and RLS
-- `@supabase/ssr` for cookie-based server rendering
-- Zod for Server Action validation
-- Recharts for dashboard visualization
-- Vinext/Vite Cloudflare Worker-compatible runtime inherited from the existing project
-
-## Supabase Setup
-
-### 1. Create a Supabase project
-
-Create a project at [database.new](https://database.new) and wait for provisioning to finish.
-
-### 2. Copy the public API values
-
-In the Supabase dashboard, open **Project Settings → API** (or the project **Connect** panel) and copy:
-
-- Project URL
-- Public/anon key
-
-Never use the service-role key in this application or expose it through a `NEXT_PUBLIC_` variable.
-
-### 3. Create `.env.local`
-
-Copy `.env.example` to `.env.local` and add:
-
-```bash
+```dotenv
 NEXT_PUBLIC_SITE_URL=http://localhost:3000
-NEXT_PUBLIC_SUPABASE_URL=https://YOUR_PROJECT.supabase.co
-NEXT_PUBLIC_SUPABASE_ANON_KEY=YOUR_PUBLIC_ANON_KEY
+NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
 ```
 
-`.env.local` is ignored by Git. Restart the development server whenever these values change.
+Only use the public anon/publishable client key here. Never use a service-role key. Never commit `.env.local`; it is ignored. Restart the server after environment changes. The upload-ready copy intentionally contains no working credentials.
 
-### 4. Run the database schema
+## Supabase migrations
 
-Open **SQL Editor** in Supabase, paste the entire contents of `database/001_initial_schema.sql`, and run it once. This creates:
+In Supabase SQL Editor, run each complete file once, in this order, against the intended database. For an existing database, apply only unapplied migrations after taking a backup:
 
-- `profiles`
-- `projects`
-- `inspections`
-- `ncrs`
-- `punch_items`
-- `documents`
-- `notifications`
-- profile and updated-at triggers
-- indexes, grants, and RLS policies
+1. `database/001_initial_schema.sql`
+2. `database/003_procore_document_register.sql`
+3. `database/004_wir_integration.sql`
+4. `database/005_wir_pdf_metadata.sql`
+5. `database/006_quality_records_v2.sql`
+6. `database/007_project_context.sql`
+7. `database/008_quality_integrity.sql`
 
-Then run migrations `003` through `007` in filename order. Migration `007_project_context.sql` adds contractor and consultant fields to projects and stores each authenticated user's active-project selection. All migrations are additive and preserve existing records. `database/002_seed.sql` is optional demo data and should not be run against production data.
+`002_seed.sql` is **optional demo data only**. It is not needed for startup, accounts, projects, numbering, or empty states. Do not run it against production data.
 
-### 5. Configure authentication
+007 already existed before this revision. It adds contractor/consultant fields and saved active-project preference. 008 adds relation validation, atomic new RRR controls/revision history, append-only revision history and release guards. It does not rewrite or delete existing records when applied. No migration is applied automatically by the application or verification scripts.
 
-In **Authentication → URL Configuration**:
+With only 001 and 003–006 applied, base project creation with empty contractor/consultant fields can work and selection is remembered in a cookie. Apply 007 to save those fields and persist selection across devices. Apply 008 for database-enforced release and relationship integrity. Use the full order above for the supported revised setup.
 
-- Set the Site URL to `http://localhost:3000` for local development.
-- Add `http://localhost:3000/auth/confirm` as an allowed redirect URL.
+## Authentication
 
-In **Authentication → Email Templates → Confirm signup**, replace the confirmation link with this server-readable token-hash link:
+Email/password sign-in and the existing Create account UI are preserved. Public signup is governed by Supabase Auth settings; disable it there for an invite-only workspace. Server checks use `auth.getUser()`; anonymous users cannot read protected records.
+
+Set Supabase Auth Site URL and allowed confirmation redirect to your actual development origin and `/auth/confirm`. For Codespaces, use the forwarded HTTPS origin instead of localhost. If email confirmation is enabled, use a token-hash confirmation link compatible with the server callback:
 
 ```html
-<a href="{{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&type=email"
-  >Confirm your email</a
->
+<a href="{{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&type=email">Confirm email</a>
 ```
 
-This template change is required for cookie-based SSR authentication. The default confirmation URL can return the session in a URL fragment, which is not available to the server callback.
+Confirm email when required, then sign in. There is no dependency on seeded users. Authenticated users share this workspace's project and QA/QC records under the existing RLS model; this is **not tenant-isolated or role-separated authorization**. Profiles are self-editable, notifications are user-scoped, and record creators are derived from the verified session. Do not treat the Engineer/CxA/Employer fields as role-restricted digital signatures.
 
-Email/password auth is enabled by default on most Supabase projects. If email confirmation is enabled, new users must follow the confirmation email before signing in. The `handle_new_user` database trigger creates the matching profile.
+## Create the first project
 
-### 6. Create the first account
+1. Sign in, then click **Create Project** on the empty dashboard/header, or open **Projects**.
+2. Enter project name/code, employer, location and optional contractor, consultant and description.
+3. Save. The first project becomes active automatically; its name/code appears in the header.
+4. Use the header selector to switch projects or create another. Dashboard, Reports and all five quality registers follow that selection.
 
-Start the application, open `/login`, choose **Create account**, and register the first QA/QC user. Confirm the email if required.
+Example values are placeholders, not compulsory defaults: IL05.1 Istanbul Data Center / IL051 / EQUINIX / SERBAN CONSTRUCTION CO. / ARUP / Istanbul.
 
-### 7. Load demo data
+The supplied official naming tables are project-specific to IL051 (IL05 maps to IL051). Other project records may be managed, but do not invent official codes for a new project without approved naming configuration. RRR uses the supplied IL051 template only. Documents retain explicit target-project selection.
 
-After at least one profile exists, run `database/002_seed.sql` from the SQL Editor. It assigns the fictional IST Data Center Expansion records to the earliest real profile; it does not use a fake auth UUID.
+## Modules and identities
 
-## Procore document register
+| Module | Identity and workflow |
+| --- | --- |
+| WIR | `WIR.0001`; eight-part EAS-6-B code; inspection, references and engineer result |
+| MIR | `MIR.0001`; material receipt, delivery/traceability, review and disposition |
+| NCR | `NCR.0001` for new records; legacy identifiers preserved on edit; root cause, actions and closeout |
+| SOR | `SOR.0001`; separate observation, contractor proposal, actions and closeout |
+| RRR | `RRR.000001`; six-digit identity, fixed CDE code `IL051-RP-G-RRR`, template `SBI-EQIL5-KLT-FR-RRR` |
 
-The source export `Documents - All Documents (10).csv` contains 205 records. The detected eight-part core is:
+Canonical routes are `/wir`, `/mir`, `/ncr`, `/sor`, `/rrr`, with `/[id]` details. Legacy `/inspections` and `/ncrs` redirect. Registers provide create/edit/delete, filters and explicit feedback. Later review/closure fields are not mandatory at initial creation.
+
+NCR/SOR/RRR actions have description, responsible person, due date, Open/In Progress/Verified/Closed status, completion date and verification note. Completing an action requires verification. Related-record panels support local record IDs or external Procore references. Local relationships must remain within the same project.
+
+RRR keeps RR-1 through RR-4 controls, tags, open items, evidence, attendance, declarations, signatories, metadata-only attachments and revision history. Use each row's **Edit** disclosure to correct child records or close blockers. For resubmission, change the submission revision to a new value; history is appended atomically with migration 008.
+
+Release requires complete RR-4, no open P1/P2, declarations, separate Engineer verification and CxA acceptance, and matching Employer release/status. Energization additionally requires referenced and signed L2B tags. After release, changes that would invalidate the gate are rejected; return the record and Employer decision to a non-released state before revising the gate. Readiness does not constitute handover, operational acceptance or automatic energization.
+
+## WIR PDF privacy and naming
+
+WIR PDF prefill is entirely browser-side using PDF.js and Tesseract.js. Filename metadata is parsed first; PDF fields fill remaining values, with conflicts shown for manual correction. The PDF's inspection item and pile numbers are retained. Only explicit Save submits structured fields.
 
 ```text
-Project-Type-Discipline-Number-LocationSlot-Volume/System-Classification-Originator
+Document code: IL051-IP-S-WIR.0015-XX-XX-XXXX-SRB
+Revision: R00
+Inspection item: Bored Piling Works (2-5-8-26-28)
+Filename metadata: IL051-IP-S-WIR.0015-XX-XX-XXXX-SRB-R00-WIR Bored Piling Works (2-5-8-26-28).pdf
 ```
 
-Imported `Name` values remain authoritative. The importer takes the first eight hyphen-delimited segments as `document_code` and preserves the full original name separately. This matters because the source contains valid suffixes, legacy three-character classification slots, several observed location-slot variants, and one invalid free-text Name.
+Revision/title are not document-code segments. No PDF bytes, blobs, base64 or source text are uploaded to Supabase or permanently stored. Workers, temporary buffers and file inputs are cleaned after extraction. OCR scans up to seven pages, including page one. Current limit: 60 MB. OCR is fallible; always review editable values. OCR runtime/language assets may be downloaded from third-party CDNs, but document bytes are processed locally. A restrictive CSP must allow the worker/runtime assets and blob workers. HTTPS-forwarded browser behavior still requires environment-specific acceptance testing.
 
-Reference values are generated under `data/procore/`. To regenerate them from a future export:
+No automatic MIR/NCR/SOR/RRR OCR mappings were added. Attachments are references/metadata only. There is no Procore API synchronization: the document register imports user-selected CSV metadata and skips duplicates. Reference PDF/DOCX/Excel/CSV files are not distributed; derived runtime JSON is retained intentionally.
 
-```bash
-node scripts/generate-procore-reference.mjs "C:\path\to\Documents.csv"
-```
+## Run and verify
 
-Use `/documents/import` to select a CSV, validate required columns, preview rows, choose the target QAQC project, and import metadata. Existing document codes and duplicates inside the CSV are skipped by default. The import never uploads referenced PDF files and never calls the Procore API.
-
-Manual document creation is available from `/documents`. Project codes must map to the source project's observed `IL05`/`IL051` identity. The generated code is read-only, number formats are validated by document type, and a unique database index provides the final duplicate guard.
-
-## WIR / inspections
-
-The existing `/inspections` route is the project WIR register; there is no separate WIR application. New records use official EAS-6-B discipline, level, plan-area, volume, classification, and originator tables. `IP` is fixed as the file type and `WIR.####` remains one Segment 4 value.
-
-The form suggests the next project WIR number, displays the eight generated segments before save, rejects duplicate WIR numbers and full codes, and links an existing Procore document with the same code. Legacy inspections remain visible and are converted to the structured WIR shape only when edited and saved.
-
-WIR PDF pre-fill is browser-only. Digital text or scanned-page OCR is processed in temporary memory, the file input and extraction workers are cleared after every attempt, and neither PDF bytes, base64 content, file metadata, nor Storage objects are sent to Supabase. Only the corrected structured form fields are submitted when the user explicitly saves the WIR.
-
-## Installation and development
-
-The repository currently uses a pnpm lockfile:
-
-```bash
-pnpm install
+```sh
 pnpm dev
-```
-
-The requested npm commands are also available:
-
-```bash
-npm install
-npm run dev
-```
-
-Open [http://localhost:3000](http://localhost:3000). Other useful commands:
-
-```bash
-pnpm run verify:procore "C:\path\to\Documents.csv"
 pnpm run lint
 pnpm exec tsc --noEmit
+pnpm run verify:wir
+pnpm run verify:v2
+pnpm run verify:revision
+pnpm run verify:database
 pnpm run build
+pnpm start
 ```
 
-## Authentication and authorization
+Dev normally serves port 3000. `pnpm start` runs the built worker locally using Wrangler and `dist/server/wrangler.json`; it does not deploy. The optional CSV check is:
 
-- `proxy.ts` refreshes Supabase cookies and redirects unauthenticated application requests to `/login`.
-- Protected layouts verify the current user again on the server.
-- Server Actions never accept a creator/user ID from the browser; they use the verified session user.
-- PostgreSQL RLS denies anonymous access.
-- For this collaborative MVP, authenticated users can manage shared QA/QC project records. Notifications remain user-scoped, and profiles are self-editable only.
-
-## Dashboard calculation
-
-Completion percentage is:
-
-```text
-(closed NCRs + closed punch items) / (all NCRs + all punch items) × 100
+```sh
+pnpm run verify:procore "C:/path/to/Documents.csv"
 ```
 
-The result is `0%` when there are no quality items. Overdue items are calculated at read time when `due_date` is before today and status is not `Closed`; overdue is not stored as a status.
+`verify:database` runs migrations and CRUD/RLS/gate cases in an isolated in-memory PostgreSQL engine (PGlite), with an Auth-role shim. It never loads `.env`, contacts Supabase or modifies application data. It is not a replacement for testing hosted Auth/PostgREST or concurrent transactions.
 
-## Security checklist
+Dashboard/Reports use real active-project Supabase rows; paginated reads avoid the default response cap. Empty tables produce zeros. Unavailable tables produce error feedback. Module status terminology remains distinct. Room-ready metrics require actual release decisions and complete gates, not a generic Approved flag.
 
-- No service-role key is used or committed
-- `.env.local` and all `.env*` files are ignored
-- Anonymous database access is revoked
-- RLS is enabled for all seven application tables
-- Auth identity is verified server-side
-- Mutations use Zod validation and safe user-facing errors
-- Procore CSV rows are revalidated on the server before insertion
-- Duplicate document codes are blocked in the UI, Server Action, and PostgreSQL unique index
-- File paths are metadata-only until Supabase Storage is implemented
+## GitHub and acceptance
 
-## Current limitations
+The clean `QAQC-Tracker-GitHub` folder contains source, configuration, all migrations, runtime JSON and placeholder environment example only. Install dependencies after cloning. No Git repository is initialized and nothing is committed, pushed or deployed by this revision.
 
-- Document file upload and Supabase Storage are intentionally deferred.
-- Authenticated users share one collaborative data scope; project membership and role permissions are not implemented yet.
-- Recent activity is derived from record timestamps rather than a dedicated audit log.
-- Notification generation and read-management workflows are not automated yet; the navigation displays unread stored notifications.
-- Register filtering is performed on the loaded MVP dataset; server-side pagination is a future scalability step.
-- Naming reference data reflects the supplied CSV snapshot and must be regenerated when new Procore codes are introduced.
-- Direct Procore API authentication and synchronization are intentionally not implemented.
+Do not upload generated dependencies, dist/build/cache output, OCR language files, logs, credentials or reference exports. Keep `.openai/hosting.json` and `data/procore/*.json`.
 
-## Roadmap
+Before production use, test an authenticated fresh database end-to-end: first-project creation/selection; create, view, edit and delete disposable records in all five modules; RRR blocker closure and release; duplicate rejection; and digital/scanned PDF extraction over the real forwarded HTTPS URL. The audit report distinguishes completed automated tests from these outstanding checks.
 
-1. Add organizations, project membership, and role-based RLS.
-2. Add Supabase Storage document uploads with file validation and signed URLs.
-3. Add an administrator-approved workflow for changing naming rules and code masters.
-4. Add direct Procore API synchronization after CSV workflows are accepted.
-5. Add audit-log events, automated notifications, pagination, and broader integration tests.
+Known scope limits: shared authenticated access (no project memberships), client-side filtering over fully loaded registers, beta Vinext runtime, no immutable full audit log or signature authorization, no Procore API sync, and no source-document storage. These require separate product/security decisions, not silent migration changes.

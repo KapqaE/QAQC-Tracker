@@ -18,6 +18,8 @@ export const issueStatuses = [
   'Verified',
   'Closed',
   'Disputed',
+  'Corrective Action',
+  'Ready for Inspection',
   'Superseded',
 ] as const;
 
@@ -87,9 +89,10 @@ export function generateQualityDocumentCode(parts: {
 }
 
 export function normalizeQualityStatus(status: string) {
-  if (['A - Proceed', 'B - Proceed, Comments', 'Approved', 'Passed', 'Closed', 'Verified', 'CxA Accepted', 'Released for Commissioning', 'Released for Energization'].includes(status)) return 'approved';
-  if (['C - Rejected', 'Rejected', 'Failed', 'Not Verified', 'Not Released'].includes(status)) return 'rejected';
+  if (['A', 'B', 'Approved with Comments', 'A - Proceed', 'B - Proceed, Comments', 'Approved', 'Passed', 'Closed', 'Verified', 'CxA Accepted', 'Released for Commissioning', 'Released for Energization'].includes(status)) return 'approved';
+  if (['C', 'C - Rejected', 'Rejected', 'Failed', 'Not Verified', 'Not Released'].includes(status)) return 'rejected';
   if (['Draft', 'Open', 'In Progress', 'Corrective Action', 'Disputed'].includes(status)) return 'open';
+  if (status === 'Superseded' || status === 'N/A') return 'inactive';
   return 'review';
 }
 

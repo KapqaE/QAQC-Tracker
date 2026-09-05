@@ -69,7 +69,7 @@ export function sorFields(projects: Project[]): QualityRecordField[] { return [.
 
 export function ncrFields(projects: Project[]): QualityRecordField[] { return [...identity(projects, 'ncr_number', 'NCR number'),
   { name: 'description', label: 'Description of non-conformance', section: 'Non-conformance', type: 'textarea', required: true, span: 2 }, { name: 'location', label: 'Location', section: 'Non-conformance' },
-  { name: 'activity', label: 'Activity', section: 'Non-conformance' }, { name: 'severity', label: 'Severity', section: 'Non-conformance', type: 'select', required: true, options: opt(['Level 1','Level 2','Level 3','Level 4']) },
+  { name: 'activity', label: 'Activity', section: 'Non-conformance' }, { name: 'severity', label: 'Severity', section: 'Non-conformance', type: 'select', required: true, options: opt(['Level 1','Level 2','Level 3','Level 4','Low','Medium','High','Critical']) },
   { name: 'issued_by', label: 'Issued by', section: 'Non-conformance' }, { name: 'issue_date', label: 'Issue date', section: 'Non-conformance', type: 'date' },
   { name: 'responsible_company', label: 'Responsible company', section: 'Accountability', required: true }, { name: 'assigned_person', label: 'Assigned person', section: 'Accountability', required: true },
   { name: 'due_date', label: 'Due date', section: 'Accountability', type: 'date', required: true },

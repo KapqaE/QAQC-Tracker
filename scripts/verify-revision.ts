@@ -1,0 +1,26 @@
+import assert from 'node:assert/strict';
+import { PostgrestError } from '@supabase/supabase-js';
+import { safeReturnPath } from '../lib/auth-redirect';
+import { declarationFields, rrrGateIssues, rrrReleaseIssues } from '../lib/quality-records/rrr-gate';
+import { readAll } from '../lib/services/read-all';
+import type { Tables } from '../types/database';
+
+for (const input of ['https://example.org', '//example.org', '/\\example.org', '/\ninvalid', null]) assert.equal(safeReturnPath(input), '/');
+assert.equal(safeReturnPath('/wir?status=Open'), '/wir?status=Open');
+const record: Partial<Tables<'rrr_records'>> = { status: 'Released for Commissioning', engineer_decision: 'Verified', cxa_decision: 'Accepted', employer_release: 'Room Released for Commissioning' };
+for (const key of declarationFields) record[key] = true;
+const controls = [{ control_level: 'RR-4', percent_complete: 100, open_actions_count: 0 }];
+assert.deepEqual(rrrReleaseIssues(record, controls, []), []);
+assert.ok(rrrGateIssues(record, [], []).length);
+assert.ok(rrrReleaseIssues({ ...record, engineer_decision: 'Not Verified' }, controls, []).length);
+assert.ok(rrrReleaseIssues(record, controls, [{ priority: 'P1', status: 'Open' }]).length);
+assert.ok(rrrReleaseIssues({ ...record, status: 'Draft' }, controls, []).length);
+assert.ok(rrrReleaseIssues({ ...record, doors_installed_locked: false }, controls, []).length);
+assert.ok(rrrGateIssues(record, [{ ...controls[0], open_actions_count: 1 }], []).length);
+const data = Array.from({ length: 1201 }, (_, i) => i);
+const result = await readAll({ range: async (from, to) => ({ data: data.slice(from, to + 1), error: null }) });
+assert.deepEqual(result.data, data);
+const failed = await readAll({ range: async () => ({ data: null, error: new PostgrestError({ code: 'test', message: 'failed', details: '', hint: '' }) }) });
+assert.equal(failed.data.length, 0);
+assert.ok(failed.error);
+console.log('Revision verification passed: redirect safety, RRR gates and complete paginated reads.');
